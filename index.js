@@ -1,7 +1,7 @@
 'use strict';
 
 var
-	Packager = require('./lib/packager');
+	Packager = require('./lib/Packager');
 
 /**
 * Package an Enyo 2.6+ application based on the provided options.
