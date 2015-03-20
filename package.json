@@ -35,6 +35,7 @@
     "through2": "^0.6.3",
     "vinyl": "^0.4.6",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "winston": "^0.9.0"
   }
 }
