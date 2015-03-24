@@ -23,7 +23,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   ],
-  "devDependencies": {
+  "dependencies": {
     "browserify": "^9.0.3",
     "chalk": "^1.0.0",
     "deps-sort": "^1.3.5",
