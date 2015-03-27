@@ -26,6 +26,7 @@
   "dependencies": {
     "browserify": "^9.0.3",
     "chalk": "^1.0.0",
+    "clean-css": "^3.1.8",
     "deps-sort": "^1.3.5",
     "glob": "^5.0.3",
     "gulp": "^3.8.11",
