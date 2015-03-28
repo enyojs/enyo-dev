@@ -6,7 +6,7 @@ var
 	nom = require('nomnom');
 
 var
-	options = require('../lib/Packager/packager-options'),
+	options = require('../lib/Packager/options'),
 	dev = require('../');
 
 nom
