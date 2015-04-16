@@ -27,6 +27,7 @@
   ],
   "dependencies": {
     "browserify": "^9.0.3",
+    "browserify-incremental": "^2.0.0",
     "bundle-collapser": "^1.1.4",
     "chalk": "^1.0.0",
     "clean-css": "^3.1.8",
