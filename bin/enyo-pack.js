@@ -13,4 +13,4 @@ nom
 	.script('enyo-pack | epack')
 	.options(options);
 
-dev.package(nom.parse());
+dev.package(nom.parse()).run();
