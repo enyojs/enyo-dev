@@ -45,9 +45,8 @@
     "vinyl": "^0.4.6",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "winston": "^0.9.0"
-  },
-  "devDependencies": {
-    "uglify-js": "^2.4.17"
+    "winston": "^0.9.0",
+    "uglify-js": "^2.4.17",
+    "slash": "~1.0.0"
   }
 }
