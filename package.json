@@ -34,6 +34,7 @@
     "deps-sort": "^1.3.5",
     "express": "^4.12.3",
     "filewatcher": "^2.2.0",
+    "fs-extra": "^0.18.2",
     "glob": "^5.0.3",
     "gulp": "^3.8.11",
     "gulp-sourcemaps": "^1.5.0",
@@ -41,12 +42,12 @@
     "less": "^2.5.0",
     "nomnom": "^1.8.1",
     "parse5": "^1.4.1",
+    "slash": "~1.0.0",
     "through2": "^0.6.3",
+    "uglify-js": "^2.4.17",
     "vinyl": "^0.4.6",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "winston": "^0.9.0",
-    "uglify-js": "^2.4.17",
-    "slash": "~1.0.0"
+    "winston": "^0.9.0"
   }
 }
