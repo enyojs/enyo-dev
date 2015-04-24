@@ -5,10 +5,18 @@
 var
 	nom = require('nomnom'),
 	options = require('../lib/Generator/options'),
-	Generator = require('../lib/Generator');
+	commands = require('../lib/Generator/commands');
 
 nom
 	.script('enyo-gen | egen')
 	.options(options);
 
-new Generator(nom.parse());
+commands.forEach(function (command) {
+	nom
+		.command(command.name)
+		.options(command.options)
+		.help(command.help)
+		.callback(command.callback);
+});
+
+nom.parse();
