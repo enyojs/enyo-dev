@@ -103,6 +103,7 @@ Options:
 
    --link-all-libs   Use this to indicate that all requested libraries are to be linked.  [false]
    --defaults        Use this when you already have dependencies in your bower.json file but also want to install any missing defaults. If any of the default libraries are listed their version will be used instead of the default  [false]
+   --save            When installing dependencies, set this to preserve them to your bower.json file.  [false]
 
 Initialize the target as an enyo project by installing necessary components in default locations. If no libs are specified, the default collection of enyo-related libraries will be installed. If a bower.json already exists with dependencies they will be used instead of the defaults (with preference given to any specified with the --libs option). To combine them with the defaults, use the --defaults flag.
 ```
