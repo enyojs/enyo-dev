@@ -17,7 +17,7 @@ git clone https://github.com/enyojs/enyo-dev.git && \
 
 ## Available tools
 
-#### enyo-pack
+### enyo-pack
 
 The `enyo-pack` command packages the source for an Enyo application. It may also be executed using the `epack` alias.
 
@@ -71,6 +71,40 @@ Each of the command-line options has an equivalent option in the `package.json` 
 		"templateIndex": "",
 		"knownAssetsOnly": false
 	}
+```
+
+### enyo-gen
+
+> In very early/limited state. Currently, only one sub-command is available: init
+
+The `enyo-gen` helper executable exposes other project initialization and scaffolding commands. It is aliased to `egen`.
+
+#### Available sub-commands
+
+##### init
+
+This command is used to help initialize a new project or update an existing project. It has inherent knowledge of enyo-related libraries but can also be used to include and manage external [bower](http://bower.io/) dependencies (or anything accessible via a git-path).
+
+```bash
+Usage: enyo-gen | egen init [package] [options]
+
+package     The relative path to the target directory, if it does not exist it will be created.
+
+Options:
+   -l, --log-level   What level of output to use [error, log, debug, info, verbose]  [info]
+   --name            The name of the project. If not set it will attempt to find it from an available package.json file and if not found will default to the package name (directory)
+   --libs            A comma-separated list of libraries to include that overrides the default of all enyo-related libraries. Additional libraries can be installed from git paths or bower.
+
+		Example: --libs=moonstone,enyo=git@github.com:enyojs/enyo.git#master,enyo-ilib
+
+   --link-libs       A comma-separated list of libraries to link from locally installed, bower-linked versions of the named dependent library. Note this requires the libraries to have been checked out on the current system and have had `bower link` executed in each.
+
+		Example: --link-libs=moonstone,enyo
+
+   --link-all-libs   Use this to indicate that all requested libraries are to be linked.  [false]
+   --defaults        Use this when you already have dependencies in your bower.json file but also want to install any missing defaults. If any of the default libraries are listed their version will be used instead of the default  [false]
+
+Initialize the target as an enyo project by installing necessary components in default locations. If no libs are specified, the default collection of enyo-related libraries will be installed. If a bower.json already exists with dependencies they will be used instead of the defaults (with preference given to any specified with the --libs option). To combine them with the defaults, use the --defaults flag.
 ```
 
 ## Copyright and License Information
