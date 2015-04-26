@@ -54,6 +54,9 @@ Each of the command-line options has an equivalent option in the `package.json` 
 
 ```json
 	{
+		"main": "index.js",
+		"styles": [],
+		"assets": [],
 		"package": "./",
 		"logLevel": "debug",
 		"devMode": false,
