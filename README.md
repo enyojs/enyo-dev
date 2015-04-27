@@ -73,6 +73,44 @@ Each of the command-line options has an equivalent option in the `package.json` 
 	}
 ```
 
+
+### enyo-serve
+
+The `enyo-serve` command packages the source for an Enyo application using `enyo-pack`, serves the
+application via HTTP, and watches the source files so it can rebuild the app on a change. It may
+also be executed using the `eserve` alias.
+
+In addition to the options supported by `enyo-pack`, `enyo-serve` also supports three options
+related to the HTTP server: `--localOnly`, `--web-root`, and `--port`.
+
+To see a list of available options use `enyo-serve --help`
+
+```bash
+Usage: enyo-serve | eserve [package] [options]
+
+package     The relative path to the application directory to package
+
+Options:
+   -l, --log-level        What level of output to use [error, log, debug, info, verbose]  [info]
+   -D, --dev-mode         Whether or not this build is a development build  [true]
+   -I, --incremental      uses browserify-incremental to speed up future builds. Can either be true to use an in-memory cache or a path to persist the change cache across builds  [false]
+   -L, --lib-path         The relative path from the package root to where the libraries can be found  [lib]
+   --title                To set the <title> of the output project index
+   --include-libs         This is a comma-separated, ordered list of libraries that have library-level options (package.json) that need to be included in the final build. If the library is explicitly required in the source it does not need to be in this list.
+   -d, --outdir           Where to place the output files  [./dist]
+   -o, --outfile          The output filename for the compiled application HTML  [index.html]
+   -a, --asset-outdir     The directory for all assets in the package output, relative to outdir  [.]
+   -K, --known-assets     When a project is only referencing assets from within CSS set this to ensure you only copy assets that are actually used into the final package
+   -c, --css-outfile      If the compiled CSS should not be inserted into the packaged HTML file
+   -j, --js-outfile       If the compiled JS should not be inserted into the packaged HTML file
+   -t, --template-index   Instead of using the auto-generated HTML index, start from this file
+   -p, --port             The port to bind to for incoming requests  [8000]
+   --localOnly            Whether or not to only accept connections from localhost  [false]
+   -R, --web-root         The relative path from the current working directory to host files from
+```
+
+Unlike `enyo-pack`, the command-line options *cannot* be set via the `package.json` file.
+
 ### enyo-gen
 
 > In very early/limited state. Currently, only one sub-command is available: init
