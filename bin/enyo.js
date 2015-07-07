@@ -5,10 +5,11 @@
 var
 	nom = require('nomnom'),
 	options = require('../lib/enyo/options'),
-	commands = require('../lib/enyo/commands');
+	commands = require('../lib/enyo/commands'),
+	subargs = require('../lib/utils').subargs;
 
 nom
-	.script('enyo-gen | egen')
+	.script('enyo')
 	.options(options);
 
 commands.forEach(function (command) {
@@ -19,4 +20,4 @@ commands.forEach(function (command) {
 		.callback(command.callback);
 });
 
-nom.parse();
+nom.parse(subargs());
