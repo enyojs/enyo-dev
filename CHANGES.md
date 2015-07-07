@@ -89,16 +89,16 @@ There is a new command, `enyo`, available once you've installed _enyo-dev_. It r
 
 > The `enyo-gen` and `egen` commands are now a direct alias to the _preferred_ `enyo` command but could be removed in a future release. You should now use `enyo` instead.
 
-> The `enyo-serve`, `eserve`, `enyo-pack` and `epack` commands are now aliases for `enyo serve` and `enyo pack` respectively. It is still save to use the alias however.
+> The `enyo-serve`, `eserve`, `enyo-pack` and `epack` commands are now aliases for `enyo serve` and `enyo pack` respectively. It is still safe to use the alias however.
 
 ### Commands
 ##### <a name="enyo-init"></a>`enyo init`
 
 > Previously `enyo-gen init` or `egen init`
 
-This command is used to initialize a new Enyo project or re-initialize an existing project. Enyo now configures projects _two different ways_. For general configuration of projects and to disambiguate the use of the `package.json` file the tools use a new file `.enyoconfig`. The `enyo init` command will generate a global reference for defaults at `~/.enyoconfig` that can be modified. It will also create one in the root of your projects. The `.enyoconfig` file is JSON and is easily manipulated by-hand or via the `enyo config` command. It supports a special set of keys which can be found by using `enyo config --list` or by reviewing any `.enyoconfig` generated with the defaults.
+This command is used to initialize a new Enyo project or re-initialize an existing project. Enyo now configures projects _two different ways_. For general configuration of projects and to disambiguate the use of the `package.json` file the tools use a new file `.enyoconfig`. The `enyo init` command will generate a global reference for defaults at `~/.enyoconfig` that can be modified. It will also create one in the root of your projects. The `.enyoconfig` file is JSON and is easily manipulated by hand or via the `enyo config` command. It supports a special set of keys which can be listed using `enyo config --list` or by reviewing any `.enyoconfig` generated with the defaults.
 
-Of particular interest are the `"libraries"` and `"sources"` properties. The `"libraries"` array is a list of library names that should be installed for a particular project. The defaults list the most common Enyo related libraries. And there is no harm in having extra libraries aside from use disk-space. So, in most cases the defaults should be used. You can add/remove entries to the `"libraries"` array using `enyo config` as discussed below. The `"sources"` object maps library names to their respective remote repository.
+Of particular interest are the `"libraries"` and `"sources"` properties. The `"libraries"` array is a list of library names that should be installed for a particular project. The defaults list the most common Enyo related libraries. And there is no harm in having extra libraries aside from used disk-space. So, in most cases the defaults should be used. You can add/remove entries to the `"libraries"` array using `enyo config` as discussed below. The `"sources"` object maps library names to their respective remote repository.
 
 ##### <a name="enyo-link"></a>`enyo link`
 
@@ -109,12 +109,12 @@ cd Devel/enyo
 enyo link
 cd ../projects/myproject
 enyo link enyo
-# you will now have lib/enyo setup and linked to the local enyo
+# you will now have lib/enyo setup and linked to Devel/enyo
 ```
 
 ##### <a name="enyo-unlink"></a>`enyo unlink`
 
-This command is the counter-part to the `enyo link` command and conveniently unlinks the named library.
+This command is the counterpart to the `enyo link` command and conveniently unlinks the named library.
 
 ##### <a name="enyo-find-links"></a>`enyo find-links`
 
