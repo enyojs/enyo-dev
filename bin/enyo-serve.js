@@ -7,10 +7,11 @@ var
 
 var
 	options = require('../lib/Server/options'),
+	subargs = require('../lib/utils').subargs,
 	serve = require('../lib/Server');
 
 nom
 	.script('enyo-serve | eserve')
 	.options(options);
 
-serve(nom.parse());
+serve(nom.parse(subargs()));
