@@ -2,7 +2,11 @@
 
 #### INSTALLATION / UPGRADE INSTRUCTIONS
 
-Before you do anything else, ensure that you follow these directions when upgrading from your current version of _enyo-dev_ to the latest release, `1.0.0-pre.1`. The tools still require a local copy of the source.
+Before you do anything else, ensure that you follow these directions when upgrading from your current version of _enyo-dev_ to the latest release. The tools still require a local copy of the source. Note that this version requires node version 0.12.2 or higher. To check your version of node use the following command:
+
+```bash
+node --version
+```
 
 ##### Clean Install
 
@@ -11,7 +15,6 @@ If you follow these instructions for a clean install on a system that has never 
 ```bash
 git clone https://github.com/enyojs/enyo-dev.git
 cd enyo-dev
-git checkout 1.0.0-pre.1
 npm install
 npm link
 ```
@@ -21,8 +24,7 @@ npm link
 If you already have a local clone of _enyo-dev_ and need to upgrade follow these instructions from the root of the local repository.
 
 ```bash
-git fetch origin
-git checkout 1.0.0-pre.1
+git pull
 npm install
 npm prune
 npm link
@@ -63,7 +65,7 @@ npm link
 
 ###### <a name="1"></a>Removed dependency on browserify
 
-While the browserify project is very useful and generally extensible, it is slow and did not expose some of the features we needed most. Now we control our own depenendency bundler that manages our source and packaging needs.
+While the browserify project is very useful and generally extensible, it is slow and did not expose some of the features we needed most. Now we control our own dependency bundler that manages our source and packaging needs.
 
 ###### <a name="2"></a>Removed dependency on bower
 
@@ -81,15 +83,15 @@ enyo pack --library
 
 ###### <a name="4"></a>Added the ability to access modules from the web console
 
-Previously you would need to provide your own code to expose module content for debugging in the web console. Now this ability exists out of the box. For any library module you access (e.g. `enyo/kind`) you can access it the same way in the console via the `require` function directly. For your project modules just remember it is the relative path from the project root without the leading './'. So, for example, in the [enyo-strawman](https://github.com/enyojs/enyo-strawman/) project there is a module located at `./src/svg-samples` that exports an object with a few properties. To retrieve this same object at runtime in the web console just use `require('src/svg-samples')`. It's that simple! Just make sure that the module is actually included in the final source by another module.
+Previously you would need to provide your own code to expose module content for debugging in the web console. Now this ability exists out of the box. For any library module you access (e.g. `enyo/kind`) you can access it the same way in the console via the `require` function directly. For your project modules just remember the path is relative to the project root, without the leading './'. So, for example, in the [enyo-strawman](https://github.com/enyojs/enyo-strawman/) project there is a module located at `./src/svg-samples` that exports an object with a few properties. To retrieve this same object at runtime in the web console use `require('src/svg-samples')`. It's that simple! Make sure that the module is actually included in the final source by another module or it won't be available in the output.
 
 ###### <a name="5"></a>Added new command `enyo` with accessible sub-commands
 
-There is a new command, `enyo`, available once you've installed _enyo-dev_. It requires that you specify one of its child commands which can be listed using `enyo -h`. These helpers were designed specifically for the Enyo developers workflow and to assist when working with modularized code bases.
+There is a new command, `enyo`, available once you've installed _enyo-dev_. It requires that you specify one of its child commands which can be listed using `enyo -h`. These helpers were designed specifically for the Enyo developers' workflow and to assist when working with modularized code bases.
 
 > The `enyo-gen` and `egen` commands are now a direct alias to the _preferred_ `enyo` command but could be removed in a future release. You should now use `enyo` instead.
 
-> The `enyo-serve`, `eserve`, `enyo-pack` and `epack` commands are now aliases for `enyo serve` and `enyo pack` respectively. It is still safe to use the alias however.
+> The `enyo-serve`, `eserve`, `enyo-pack` and `epack` commands are now aliases for `enyo serve` and `enyo pack` respectively. It is still safe to use the aliases, however.
 
 ### Commands
 ##### <a name="enyo-init"></a>`enyo init`
@@ -125,7 +127,7 @@ cd Devel
 enyo find-links -i false
 cd projects/myproject
 enyo link enyo
-# you will now have lib/enyo setup and linked to the local enyo
+# you will now have lib/enyo setup and linked to enyo found in find-links
 ```
 
 ##### <a name="enyo-config"></a>`enyo config`
@@ -165,18 +167,18 @@ enyo config --get user.email # -> cole.davis@lge.com
 
 ##### <a name="enyo-serve"></a>`enyo serve`
 
-This is an alias to the `enyo-serve` and `eserve` commands. It accepts the same parameters which can be seen via `enyo serve -h`, `enyo-serve -h` or `eserve -h`.
+This is the preferred way to launch the test server. Still accessible through the aliases `enyo-serve` and `eserve`. Execute `enyo serve -h` to see the supported parameters.
 
 ##### <a name="enyo-pack"></a>`enyo pack`
 
-This is an alias to the `enyo-pack` and `epack` commands. It accepts the same parameters which can be seen via `enyo pack -h`, `enyo-pack -h` or `epack -h`.
+This is the preferred replacement for the (still active) aliases `enyo-pack` and `epack`. Execute `enyo pack -h` to see the supported parameters.
 
 
 ###### <a name="6"></a>Added dynamic asset path expansion in JavaScript source
 
-There are times when you need to reference an asset path directly in the JavaScript. The build tools automatically correct asset paths in CSS/Less style code and copy assets referenced in the `package.json` `"assets"` array to the correct output location based on any relevant configuration/packaging options. Now, in the JavaScript you can have the same dynamic benefit.
+There are times when you need to reference an asset path directly in JavaScript. The build tools automatically correct asset paths in CSS/Less style code and copy assets referenced in the `package.json` `"assets"` array to the correct output location based on any relevant configuration/packaging options. Now, in JavaScript you can have the same dynamic benefit.
 
-In order for the build tools to understand that you want to expand the path you have to follow these two rules:
+In order for the build tools to understand that you want to expand a path you have to follow these two rules:
 
 1. Prefix the path with `@`
 2. Use a relative path from the _current source file_ to the asset.
@@ -204,7 +206,7 @@ var myfilepath = '@../../assets/myfile.png';
 var mysubfilepath = '@./assets/mysubfile.png';
 ```
 
-With standard configuration options would become
+With standard configuration options, the final output file would contain:
 
 ```javascript
 // for the correct final output path of assets/myfile.png
@@ -215,7 +217,7 @@ var mysubfilepath = 'src/mymodule/assets/mysubfile.png';
 
 ###### <a name="7"></a>Added the ability to use the `--watch` (auto-rebuild) feature without using `enyo-serve`
 
-The functionality of watching your sourcode for changes and automaically rebuilding the output has been moved to `enyo pack` using the `--watch` flag. This means in an environment where you are already outputting your packaged applications to a web root you don't need to run `enyo serve` needlessly. Make sure to review `enyo pack -h` for all available options relating to the `--watch` command as different environments may require additional information.
+The ability to watch your source code for changes and automatically rebuilding the output has been moved to `enyo pack` when specifying the `--watch` flag. This means in an environment where you are already outputting your packaged applications to a web root you don't need to run `enyo serve` needlessly. Make sure to review `enyo pack -h` for all available options relating to the `--watch` command as different environments may require additional information.
 
 ###### <a name="8"></a>Added the ability to create on-demand loaded _bundles_ of modules via the `request` function (EXPERIMENTAL)
 
@@ -223,7 +225,7 @@ More documentation on this in an official release as this feature is experimenta
 
 ###### <a name="9"></a>Added more useful debugging information
 
-Packaging applications requires many complex steps and debugging possible errors can be painful. Sharing debugging output can be even worse remotely. This release we have added more useful debugging information that is highly versatile. By default, debugging is set to fatal messages only, this way it can more efficiently do the work you expect it to. When it does produce logging information it is in JSON form. This makes it easier to store or transfer and it can be filtered.
+Packaging applications requires many complex steps and debugging possible errors can be painful. Sharing debugging output remotely can be even worse. This release added more useful debugging information that is highly versatile. By default, debugging is set to output fatal messages only, this way it can more efficiently do the work you expect it to. When it does produce logging information it is in JSON form. This makes it easier to store or transfer and it can be filtered.
 
 > NOTE: For human-friendly form please `npm install -g bunyan`. This is __not required__ but is __extremely useful__.
 
