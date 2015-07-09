@@ -57,7 +57,6 @@ npm link
  
 ### Notes
 
-* Currently 32-bit systems can't build one of the dependencies and therefore can't use the tools
 * The `request` feature is still considered experimental and should be used with caution
 * The utility used to derive Git uri's is limited to basic git-ssh/https protocol formats at this time (e.g. `git@github.com:enyojs/enyo.git#master` and `https://github.com/enyojs/enyo.git#2.6.0-dev` type uri's)
 
@@ -178,16 +177,21 @@ This is the preferred replacement for the (still active) aliases `enyo-pack` and
 
 There are times when you need to reference an asset path directly in JavaScript. The build tools automatically correct asset paths in CSS/Less style code and copy assets referenced in the `package.json` `"assets"` array to the correct output location based on any relevant configuration/packaging options. Now, in JavaScript you can have the same dynamic benefit.
 
-In order for the build tools to understand that you want to expand a path you have to follow these two rules:
+In order for the build tools to understand that you want to expand a path you have to follow these three rules:
 
 1. Prefix the path with `@`
-2. Use a relative path from the _current source file_ to the asset.
+2. Use a relative path from the _current source file_ to the asset __OR__
+3. Use a path starting with `@@` followed by an included library's name
 
-So, if you had a project structure like this:
+So, if you had a project structure like this (not real):
 
 ```
 assets/
   myfile.png
+lib/
+  moonstone/
+    images/
+      checkbox.png
 src/
   mymodule/
     assets/
@@ -204,6 +208,8 @@ Assuming that both `package.json` files had `"assets": ["assets/**/*.png"]` in t
 var myfilepath = '@../../assets/myfile.png';
 // for the correct final output path of src/mymodule/assets/mysubfile.png
 var mysubfilepath = '@./assets/mysubfile.png';
+// for the correct final output path of moonstone/images/checkbox.png
+var moonfilepath = '@@moonstone/images/checkbox.png';
 ```
 
 With standard configuration options, the final output file would contain:
@@ -213,6 +219,22 @@ With standard configuration options, the final output file would contain:
 var myfilepath = 'assets/myfile.png';
 // for the correct final output path of src/mymodule/assets/mysubfile.png
 var mysubfilepath = 'src/mymodule/assets/mysubfile.png';
+// for the correct final output path of moonstone/images/checkbox.png
+var moonfilepath = 'moonstone/images/checkbox.png';
+```
+
+__So, why would you bother with the `@@moonstone` at all since it just wrote the same thing?__
+
+There are a few reasons. First, there is _no guarantee that future options won't  exist that may change the output file locations dynamically_. That reason alone should be enough to always let the build tools' transpiler do the work for you. The other reason is because you can specify an arbitrary location for these named variables with the `--asset-root, -Z` CLI option or the `"assetRoots"` array in the _package.json_ file. If your application is built against _moonstone_ but you will be including a pre-built library compilation exposed to your application from another location this option lets you correctly map to these assets.
+
+```javascript
+// using the notation
+var moonfilepath = '@@moonstone/images/checkbox.png';
+```
+And supplying the `-Z moonstone=/fixed/resource/root/` (or using the special notation for all library static paths `-Z *=/fixed/resource/root/`) from the CLI would produce:
+
+```javascript
+var moonfilepath = '/fixed/resource/root/moonstone/images/checkbox.png';
 ```
 
 ###### <a name="7"></a>Added the ability to use the `--watch` (auto-rebuild) feature without using `enyo-serve`
