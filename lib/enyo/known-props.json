@@ -1,0 +1,22 @@
+{
+  "libraries": "array",
+  "sources": "object",
+  "link": "array",
+  "linkAllLibs": "boolean",
+  "libDir": "string",
+  "paths": "array",
+  "interactive": "boolean",
+  "useDefaultConfig": "boolean",
+  "useGlobalConfig": "boolean",
+  "localOnly": "boolean",
+  "projectDefaults.libraries": "array",
+  "projectDefaults.sources": "object",
+  "projectDefaults.link": "array",
+  "projectDefaults.linkAllLibs": "boolean",
+  "projectDefaults.libDir": "string",
+  "projectDefaults.paths": "array",
+  "interactive": "boolean",
+  "useDefaultConfig": "boolean",
+  "useGlobalConfig": "boolean",
+  "localOnly": "boolean"
+}

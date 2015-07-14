@@ -1,6 +1,5 @@
 {
-  "user": {},
-  "defaults": {
+  "projectDefaults": {
     "libraries": [
       "enyo",
       "layout",
@@ -28,11 +27,12 @@
     "link": [],
     "linkAllLibs": false,
     "libDir": "lib",
-    "interactive": true,
-    "copyConfig": false,
-    "nameMap": {},
     "paths": [
       "lib"
     ]
-  }
+  },
+  "interactive": true,
+  "useDefaultConfig": false,
+  "useGlobalConfig": false,
+  "localOnly": false
 }
