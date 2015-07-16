@@ -4,5 +4,6 @@
   "dist",
   ".DS_Store",
   ".e_cache",
+  ".enyocache",
   "**/npm-debug.log"
 ]
