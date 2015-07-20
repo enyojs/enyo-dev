@@ -15,6 +15,8 @@ If you follow these instructions for a clean install on a system that has never 
 ```bash
 git clone https://github.com/enyojs/enyo-dev.git
 cd enyo-dev
+# if there is a version, use the next line and replace the version as appropriate
+git checkout 0.5.1
 npm install
 npm link
 ```
@@ -25,13 +27,33 @@ If you already have a local clone of _enyo-dev_ and need to upgrade follow these
 
 ```bash
 git pull
+# if there is a version, use the next line and replace the version as appropriate
+git checkout 0.5.1
 npm install
 npm prune
 npm link
 ```
 
+## Overview (0.5.1)
 
-## Overview
+* Removed dependence on the nodegit library opting instead to use gift (uses local version of `git`)
+* Using private repositories, tags, commits and branches are all supported in the `"sources"` object of the `.enyoconfig` file
+* Updated support for `--library` mode to also be able to map relative asset paths
+* Cache file will now appropriately be placed in the project directory even when built from a different location
+* The default cache-file is now `.enyocache` instead of `.e_cache`
+* Updated the default configuration file structure (`.enyoconfig`) for both the global-user version and the local project version - this is automatically updated when you run `enyo init` and will preserve manual changes
+* Fixed glob-pattern asset handling mechanism to work as expected
+	* NOTE: Use this pattern for grabbing ALL files in an assets directory example: `assets/**/*?(.*)` which will properly grab files of the form `LICENSE` and `image.png` anywhere in the tree
+	* This fix also applies to awkward directory and file names that include `.`
+* You can now add multiple entries to configuration arrays using comma-delimited lists (some examples below, explore the commands with `-h` to see all options)
+	* `enyo config -a libraries enyo,moonstone,moonstone-extra` (add multiple entries)
+	* `enyo config -r libraries enyo-webos,enyo-cordova` (remove multiple)
+	* `enyo link enyo,moonstone,svg` (link multiple libraries at the same time)
+	* `enyo unlink enyo,svg` (unlink multiple libraries at the same time)
+	* `enyo unlink -U` (unlink all linked-libraries in the current project)
+
+
+## Previous (0.5.0)
 
 * [Removed dependency on browserify](#1)
 * [Removed dependency on bower](#2)
