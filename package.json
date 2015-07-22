@@ -14,7 +14,7 @@
     "enyo": "./bin/enyo.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha"
   },
   "author": "Cole Davis <cole.davis@lge.com>",
   "maintainers": [
@@ -65,5 +65,10 @@
     "through2": "^0.6.3",
     "uglify-js": "^2.4.17",
     "winston": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
+    "mocha": "^2.2.5"
   }
 }

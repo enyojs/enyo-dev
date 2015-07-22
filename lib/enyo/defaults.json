@@ -1,0 +1,41 @@
+{
+  "libDir": "lib",
+  "libraries": [
+    "enyo",
+    "layout",
+    "canvas",
+    "svg",
+    "moonstone",
+    "onyx",
+    "spotlight",
+    "enyo-webos",
+    "enyo-cordova",
+    "enyo-ilib"
+  ],
+  "sources": {
+    "enyo": "https://github.com/enyojs/enyo.git",
+    "layout": "https://github.com/enyojs/layout.git",
+    "canvas": "https://github.com/enyojs/canvas.git",
+    "svg": "https://github.com/enyojs/svg.git",
+    "moonstone": "https://github.com/enyojs/moonstone.git",
+    "onyx": "https://github.com/enyojs/onyx.git",
+    "spotlight": "https://github.com/enyojs/spotlight.git",
+    "enyo-webos": "https://github.com/enyojs/enyo-webos.git",
+    "enyo-cordova": "https://github.com/enyojs/enyo-cordova.git",
+    "enyo-ilib": "https://github.com/enyojs/enyo-ilib.git"
+  },
+  "targets": {
+    "enyo": "2.6.0-dev",
+    "layout": "2.6.0-dev",
+    "canvas": "2.6.0-dev",
+    "svg": "master",
+    "moonstone": "2.6.0-dev",
+    "onyx": "2.6.0-dev",
+    "spotlight": "2.6.0-dev",
+    "enyo-webos": "2.6.0-dev",
+    "enyo-cordova": "2.6.0-dev",
+    "enyo-ilib": "2.6.0-dev"
+  },
+  "link": [],
+  "linkAllLibs": false
+}
