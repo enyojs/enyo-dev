@@ -217,7 +217,7 @@ The `enyo config` command is a convenience method designed to make modifying you
 
 Note that updating default values in the user-level configuration will not automatically update existing configurations.
 
-Note when adding libraries using the `enyo config` command they can have their source and target set/updated at the same time using the form `[lib]@[remote]#[target]` (e.g. `enyo@https://github.com/enyojs/enyo.git#2.6.0-dev`). __Do not use this method of adding the source and target if the GIT URI includes any commas__.
+~~Note when adding _libraries_ using the `enyo config -a defaults.libraries` or `enyo config -a libraries` (or other equivalent) commands they can have their source and target set/updated at the same time using the form `[lib]@[remote]#[target]` (e.g. `enyo@https://github.com/enyojs/enyo.git#2.6.0-dev`). __Do not use this method of adding the source and target if the GIT URI includes any commas__. Also note you can use the ssh+git formats as well e.g. `enyo@git@github.com:enyojs/enyo.git#master` is still valid.~~
 
 Note when using the `-r, --remove` flag and the `libraries` or `defaults.libraries` target it will also remove the related `sources` and `targets` entry when applicable.
 
