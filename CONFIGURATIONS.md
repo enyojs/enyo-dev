@@ -195,17 +195,18 @@ The `--script-safe` option is a boolean indicating that the requested command sh
 #### <a name="commands-config"></a>config - `enyo config`
 
 ```bash
-Usage: enyo config <target> [value] [options]
+Usage: enyo config [target] [value] [options]
 
 target     The configuration property to retrieve, set or remove. When the --global flag is set will update the user-level configuration file unless target begins with default.[target] in which case it will update the project defaults configuration.
 value      The value(s) to add/set to target. If an array, can be a comma-separated list of values to add/remove.
 
 Options:
-   -c, --config-file   Set this to a custom configuration file, otherwise defaults to .enyoconfig in the current working directory.
+   -c, --config-file   Set this to a custom configuration file, otherwise defaults to .enyoconfig in the target working directory.
    -i, --interactive   Various commands may need user input. To avoid interactive sessions and always use the built-in resolution options set this to false.
    --script-safe       When executing commands within an automated script or without an active terminal set this flag to true.
    -g, --global        Execute the current operation on the global configuration.
    --get               Retrieve the target as it would be resolved by a command from the current configuration file (global only if the --global flag is set).
+   --set               Set the target to the value. If target is an array the value will be added to the array if it does not exist. If the target is an array or the --array flag is set and the value is a comma-separated list of values, they will all be added to the array if they do not already exist. Set the --global flag to update the global configuration or defaults. This is implied if value exists. If no value exists the target will be removed entirely. NOTE you cannot set an object directly, only properties of an object.
    -a, --array         Add or remove the current value(s) from a configuration array. If the target already exists in the configuration and is an array, this is implied.
    -r, --remove        Remove the target from an array or, if not an array, remove the option altogether.
    --reset             If a target is provided, will reset the project configuration target to the current user-level default value. If the --global flag is set and target is provided it will reset the appropriate user-level configuration to the system default value. If no target is provided the project configuration will be reset to the current user-level configuration defaults. If the --global flag is set and no target is provided it will reset the user-level configuration file and defaults to system defaults. CANNOT BE UNDONE.
