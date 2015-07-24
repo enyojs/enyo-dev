@@ -574,9 +574,9 @@ describe('enyo config', function () {
 			});
 			
 			it('should be able to completely remove an array', function () {
-				opts.target = 'link';
+				opts.target = 'links';
 				return config(opts).then(function () {
-					return resolve(opts.env.config.json.link).should.eventually.be.undefined;
+					return resolve(opts.env.config.json.links).should.eventually.be.undefined;
 				});
 			});
 			

@@ -6,5 +6,7 @@
   "libDir": "string",
   "paths": "array",
   "interactive": "boolean",
-  "targets": "object"
+  "targets": "object",
+  "name": "string",
+  "title": "string"
 }

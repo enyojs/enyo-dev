@@ -1,5 +1,10 @@
 {
+  "title": "",
+  "name": "",
   "libDir": "lib",
+  "paths": [
+    "lib"
+  ],
   "libraries": [
     "enyo",
     "layout",
@@ -36,6 +41,6 @@
     "enyo-cordova": "2.6.0-dev",
     "enyo-ilib": "2.6.0-dev"
   },
-  "link": [],
+  "links": [],
   "linkAllLibs": false
 }

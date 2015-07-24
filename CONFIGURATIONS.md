@@ -4,7 +4,9 @@
 - new command options, new commands for enyo
 - new --script-safe flag for scripts/server environments
 - documentation
-
+- true separation of package/project configuration properties
+	- see lists to know which will be in which files
+- the "link" property is now "links"
 
 
 ## Enyo Developer Tools
@@ -35,6 +37,7 @@
 	- [Script/Server](#env-script)
 - [Commands](#commands)
 	- [config](#commands-config)
+	- [init](#commands-init)
 
 ### <a name="setup"></a>Setup
 
@@ -254,6 +257,30 @@ enyo config -a -r libraries enyo-cordova,canvas
 enyo config -g defaults.libDir libs
 ```
 
+#### <a name="commands-init"></a>init - `enyo init`
+
+```bash
+sage: enyo init [project] [options]
+
+project     The relative path to the project to initialize. Defaults to the current working directory. If the project directory does not exist it will be created.
+
+Options:
+   -c, --config-file   Set this to a custom configuration file, otherwise defaults to .enyoconfig in the target working directory.
+   -i, --interactive   Various commands may need user input. To avoid interactive sessions and always use the built-in resolution options set this to false.
+   --script-safe       When executing commands within an automated script or without an active terminal set this flag to true.
+   --name              This is the name of the project for the project-level configuration. If not provided and a package.json exists then it will use its "name" value. If not provided and neither a package.json or project-level configuration exists it will default to using the directory name.
+   --package           By default this will initialize a package.json file. If this is not desired set this to false with --no-package.  [true]
+   --config            By default this will initialize a .enyoconfig file. If this is not desired set this to false with --no-config.  [true]
+   --git-ignore        By default this will initialize or update a .gitignore file. If this is not desired set this to false with --no-git-ignore.  [true]
+   -L, --libraries     Only initialize this comma-separated list of library names. If the --save option is set will save this value as the project's only libraries.
+   --links             A comma-separated list of specific libraries to install as a linked library. If provided, these links will be merged with any existing directives from the configuration unless the --save flag is set in which case it will replace any existing values and be stored. If a link is specified but already exists and is not a link it will be replaced by the link - LOCAL CHANGES WILL BE LOST AND ARE UNRECOVERABLE. To avoid this behavior, use the --safe flag.
+   --link-all-libs     Set this to link from the linkable libraries instead of installing a local repository for each. If a library already exists and is not a link it will be replaced by the link - LOCAL CHANGES WILL BE LOST AND ARE UNRECOVERABLE. To avoid this behavior, use the --safe flag. If the --save flag is set, this option will be set to true in the project-level configuration.
+   --save              Set this flag to save specified options for the libraries, links and link-all-libs command options.  [false]
+   --safe              Set this flag to ensure that links for existing directories will not replace the existing library and potentially lose local changes.  [false]
+
+Initialize a new or existing Enyo project to generate required files and ensure dependencies.
+```
+The `enyo init` command is designed to aid in managing the dependencies and initialization of new or current projects. For new projects it will generate a configuration file `.enyoconfig` based on your current user-defaults, a generic `package.json` file (if one does not exist) and a `.gitignore` (if it doesn't exist) or will update an existing one to ignore the most common files and directories that should be ignored in Enyo projects. 
 
 
 ##### Footnotes
