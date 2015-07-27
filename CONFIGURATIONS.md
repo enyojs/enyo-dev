@@ -38,6 +38,7 @@
 - [Commands](#commands)
 	- [config](#commands-config)
 	- [init](#commands-init)
+	- [link](#commands-link)
 
 ### <a name="setup"></a>Setup
 
@@ -260,7 +261,7 @@ enyo config -g defaults.libDir libs
 #### <a name="commands-init"></a>init - `enyo init`
 
 ```bash
-sage: enyo init [project] [options]
+Usage: enyo init [project] [options]
 
 project     The relative path to the project to initialize. Defaults to the current working directory. If the project directory does not exist it will be created.
 
@@ -269,9 +270,11 @@ Options:
    -i, --interactive   Various commands may need user input. To avoid interactive sessions and always use the built-in resolution options set this to false.
    --script-safe       When executing commands within an automated script or without an active terminal set this flag to true.
    --name              This is the name of the project for the project-level configuration. If not provided and a package.json exists then it will use its "name" value. If not provided and neither a package.json or project-level configuration exists it will default to using the directory name.
+   --title             This is the title that will be applied to the project-level configuration and ultimately used when packaging (if the project is not a library).
    --package           By default this will initialize a package.json file. If this is not desired set this to false with --no-package.  [true]
    --config            By default this will initialize a .enyoconfig file. If this is not desired set this to false with --no-config.  [true]
    --git-ignore        By default this will initialize or update a .gitignore file. If this is not desired set this to false with --no-git-ignore.  [true]
+   --dependencies      To initialize the repository but without initializing any dependencies set this flag to false with --no-dependencies.  [true]
    -L, --libraries     Only initialize this comma-separated list of library names. If the --save option is set will save this value as the project's only libraries.
    --links             A comma-separated list of specific libraries to install as a linked library. If provided, these links will be merged with any existing directives from the configuration unless the --save flag is set in which case it will replace any existing values and be stored. If a link is specified but already exists and is not a link it will be replaced by the link - LOCAL CHANGES WILL BE LOST AND ARE UNRECOVERABLE. To avoid this behavior, use the --safe flag.
    --link-all-libs     Set this to link from the linkable libraries instead of installing a local repository for each. If a library already exists and is not a link it will be replaced by the link - LOCAL CHANGES WILL BE LOST AND ARE UNRECOVERABLE. To avoid this behavior, use the --safe flag. If the --save flag is set, this option will be set to true in the project-level configuration.
@@ -282,6 +285,24 @@ Initialize a new or existing Enyo project to generate required files and ensure 
 ```
 The `enyo init` command is designed to aid in managing the dependencies and initialization of new or current projects. For new projects it will generate a configuration file `.enyoconfig` based on your current user-defaults, a generic `package.json` file (if one does not exist) and a `.gitignore` (if it doesn't exist) or will update an existing one to ignore the most common files and directories that should be ignored in Enyo projects. 
 
+
+#### <a name="commands-link"></a>init - `enyo link`
+
+```bash
+Usage: enyo link [target] [options]
+
+target     The name of the target, linkable library to link into the current project. If omitted the current library will be made linkable by-name from other projects. This can also be a comma-separated list of linkable libraries to link into the current project. The name value is taken from the .enyoconfig (project-level configuration) if it exists otherwise it will fail.
+
+Options:
+   -c, --config-file   Set this to a custom configuration file, otherwise defaults to .enyoconfig in the target working directory.
+   -i, --interactive   Various commands may need user input. To avoid interactive sessions and always use the built-in resolution options set this to false.
+   --script-safe       When executing commands within an automated script or without an active terminal set this flag to true.
+   -f, --force         In cases where a symbolic link, file or directory already exists in the target location by the same name, remove it and continue anyway. NOTE: only use this option if you know what you are doing!
+
+Make the current library linkable from other projects or link a linkable library into the current project.
+```
+
+The `enyo link` command can be used to link an existing, linkable library into your current project or to make your current project linkable to other projects.
 
 ##### Footnotes
 <a name="fn1">1</a>: The npm package is not yet available, you will need to manually clone the repository and install it following the commands listed for [manual installation](#setup-manual).

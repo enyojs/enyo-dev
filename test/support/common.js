@@ -28,6 +28,7 @@ global.path = path;
 global.testHome = path.join(os.tmpdir(), 'enyo-dev');
 global.testProj = path.join(testHome, 'proj');
 global.testEmpty = path.join(testHome, 'empty');
+global.testLink = path.join(testHome, 'linkable');
 
 var
 	env = require('../../lib/enyo/lib/env'),
@@ -45,6 +46,7 @@ global.getOpts = function (addl) {
 var projConf, projPkg;
 
 projConf = {
+	name: 'testproject',
 	libraries: [
 		'enyo',
 		'moonstone'
@@ -72,10 +74,32 @@ global.setupEnv = function () {
 					fs.writeJsonAsync(path.join(testProj, '.enyoconfig'), projConf, {spaces: 2}),
 					fs.writeJsonAsync(path.join(testProj, 'package.json'), projPkg, {spaces: 2})
 				])
-			})
+			}),
+			fs.ensureDirAsync(testLink)
 		])
 	});
 };
+
+global.setupLinks = function () {
+	return all([
+		createLinkable('test1'),
+		createLinkable('test2'),
+		createLinkable('test3')
+	]);
+};
+
+function createLinkable(name) {
+	return getOpts().then(function (opts) {
+		var proj = path.join(testHome, name);
+		return fs.ensureDirAsync(proj).then(function () {
+			return fs.writeJsonAsync(path.join(proj, '.enyoconfig'), {name: name}).then(function () {
+				return getOpts({cwd: proj}).then(function (opts) {
+					return require('../../lib/enyo/lib/link')(opts);
+				});
+			});
+		});
+	});
+}
 
 global.cleanupEnv = function () {
 	return fs.removeAsync(testHome);
