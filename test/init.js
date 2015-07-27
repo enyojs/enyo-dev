@@ -17,6 +17,8 @@ describe('enyo init', function () {
 			});
 		});
 		
+		it('should be able to specify the project relative to the current working directory');
+		
 		it('should generate a .gitignore, .enyoconfig and package.json file');
 		
 		it('should not generate a .gitignore if --no-gitignore');
@@ -46,6 +48,12 @@ describe('enyo init', function () {
 		it('should link all libs if --link-all-libs is set');
 		
 		it('should not attempt to initialize dependencies if --no-dependencies is set');
+		
+		it('should do minimal work when --library is set');
+		
+		it('should automatically make a library linkable when --library is set');
+		
+		it('should reset the .enyoconfig if the --reset flag is set');
 		
 	});
 
