@@ -125,7 +125,20 @@ describe('enyo init', function () {
 			});
 		});
 		
-		it('should have cloned all of the default libraries');
+		it('should have cloned all of the default libraries', function () {
+			this.timeout(15000);
+			return resetEnv().then(function () {
+				return getOpts({cwd: testProj, libraries: ['enyo']}).then(function (opts) {
+					return init(opts).then(function () {
+						return opts.env.get('libDir').then(function (libDir) {
+							return fs.statAsync(path.join(testProj, libDir, 'enyo')).then(function (stat) {
+								return stat.isDirectory();
+							}).should.eventually.be.true;
+						});
+					});
+				});
+			});
+		});
 		
 		it('should create links for libraries set via "links"', function () {
 			return setupLinks().then(function () {

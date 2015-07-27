@@ -32,7 +32,7 @@ global.testLink = path.join(testHome, 'linkable');
 
 var
 	env = require('../../lib/enyo/lib/env'),
-	cli = require('../../lib/cli-logger');
+	cli = global.cli = require('../../lib/cli-logger');
 
 // we don't want to see output during testing
 cli.stop();
@@ -53,7 +53,7 @@ projConf = {
 	],
 	libDir: 'libdir',
 	sources: {
-		enyo: 'git@github.com:enyojs/enyo.git',
+		enyo: 'https://github.com/enyojs/enyo.git',
 		moonstone: 'https://github.com/enyojs/moonstone.git'
 	}
 };
