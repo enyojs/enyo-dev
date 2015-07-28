@@ -39,6 +39,7 @@
 	- [config](#commands-config)
 	- [init](#commands-init)
 	- [link](#commands-link)
+	- [unlinke](#commands-unlink)
 
 ### <a name="setup"></a>Setup
 
@@ -286,7 +287,7 @@ Initialize a new or existing Enyo project to generate required files and ensure 
 The `enyo init` command is designed to aid in managing the dependencies and initialization of new or current projects. For new projects it will generate a configuration file `.enyoconfig` based on your current user-defaults, a generic `package.json` file (if one does not exist) and a `.gitignore` (if it doesn't exist) or will update an existing one to ignore the most common files and directories that should be ignored in Enyo projects. 
 
 
-#### <a name="commands-link"></a>init - `enyo link`
+#### <a name="commands-link"></a>link - `enyo link`
 
 ```bash
 Usage: enyo link [target] [options]
@@ -303,6 +304,23 @@ Make the current library linkable from other projects or link a linkable library
 ```
 
 The `enyo link` command can be used to link an existing, linkable library into your current project or to make your current project linkable to other projects.
+
+#### <a name="commands-unlink"></a>unlink `enyo unlink`
+
+```bash
+Usage: enyo unlink [target] [options]
+
+target     The name of the target library to unlink from the given project.
+
+Options:
+   -c, --config-file   Set this to a custom configuration file, otherwise defaults to .enyoconfig in the target working directory.
+   -i, --interactive   Various commands may need user input. To avoid interactive sessions and always use the built-in resolution options set this to false.
+   --script-safe       When executing commands within an automated script or without an active terminal set this flag to true.
+   -U, --unlink-all    Set this to unlink all linked libraries in the current project. Use the --save flag to indicate you wish to also remove all entries in the "links" property array. If --unlink-all is used with --global it will unlink all linkable projects in the user's environment (essentially a reset for linkable projects).
+   -g, --global        If set, the target library will be unlinked from the user's environment or, if set with the --unlink-all flag will unlink all linkable projects from the users's environment as if they were outside of a project directory.
+
+Unlink the target library from the current project or, if linkable, remove the current library from linkable libraries by other projects.
+```
 
 ##### Footnotes
 <a name="fn1">1</a>: The npm package is not yet available, you will need to manually clone the repository and install it following the commands listed for [manual installation](#setup-manual).

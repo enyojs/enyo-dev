@@ -1,7 +1,7 @@
 {
   "libraries": "array",
   "sources": "object",
-  "link": "array",
+  "links": "array",
   "linkAllLibs": "boolean",
   "libDir": "string",
   "paths": "array",

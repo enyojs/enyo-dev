@@ -123,6 +123,18 @@ describe('enyo link', function () {
 				});
 			});
 		});
+		
+		it('should save the target(s) to the current configuration in projects with --save set', function () {
+			return resetEnv().then(function () {
+				return setupLinks();
+			}).then(function () {
+				return getOpts({cwd: testProj, target: 'test1,test2', save: true}).then(function (opts) {
+					return link(opts).then(function () {
+						return resolve(opts.env.config.get('links')).should.eventually.be.an('array').and.contain('test1', 'test2');
+					});
+				});
+			});
+		});
 	});
 	
 	
