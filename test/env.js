@@ -4,7 +4,7 @@ describe('Environment', function () {
 
 	var env;
 	
-	before('Resetting environment', function () {
+	before(function () {
 		return resetEnv();
 	});
 	
@@ -132,6 +132,24 @@ describe('Environment', function () {
 			env.user.json.scriptSafe = false;
 			return env.get('interactive').should.eventually.be.true;
 		});
+	});
+	
+	context('Server/Batch environment', function () {
+	
+		before(function () {
+			return resetEnv();
+		});
+		
+		it('should not create user configuration files/directories', function () {
+			return getOpts({cwd: testHome, scriptSafe: true}).then(function (opts) {
+				return all([
+					resolve(opts.env.user.json).should.eventually.not.exist,
+					resolve(opts.env.user.defaults).should.eventually.not.exist,
+					fs.statAsync(path.join(testHome, '.enyo')).should.eventually.be.rejected
+				]);
+			});
+		});
+	
 	});
 
 });
