@@ -29,6 +29,12 @@ global.testHome = path.join(os.tmpdir(), 'enyo-dev');
 global.testProj = path.join(testHome, 'proj');
 global.testEmpty = path.join(testHome, 'empty');
 global.testLink = path.join(testHome, 'linkable');
+global.testLibs = path.join(testHome, 'test-libs');
+global.testLibsPaths = [
+	path.join(testLibs, 'lib1'),
+	path.join(testLibs, 'more', 'lib2'),
+	path.join(testLibs, 'more', 'lib3')
+];
 
 var
 	env = require('../../lib/enyo/lib/env'),
@@ -86,6 +92,18 @@ global.setupLinks = function () {
 		createLinkable('test2'),
 		createLinkable('test3')
 	]);
+};
+
+global.setupTestLibs = function () {
+	return fs.ensureDirAsync(testLibs).then(function () {
+		return all(testLibsPaths.map(function (p) {
+			return fs.ensureDirAsync(p).then(function () {
+				return getOpts({cwd: p, library: true}).then(function (opts) {
+					return require('../../lib/enyo/lib/init')(opts);
+				});
+			});
+		}));
+	});
 };
 
 function createLinkable(name) {

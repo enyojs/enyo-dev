@@ -135,6 +135,50 @@ describe('enyo link', function () {
 				});
 			});
 		});
+		
+		it('should list the current project\'s linked libraries with --list', function () {
+			return resetEnv().then(function () {
+				return setupLinks();
+			}).then(function () {
+				return getOpts({cwd: testProj, target: 'test1,test2'}).then(function (opts) {
+					return link(opts);
+				});
+			}).then(function () {
+				return getOpts({cwd: testProj, list: true}).then(function (opts) {
+					return link(opts);
+				}).then(function (links) {
+					return resolve(links.map(function (e) { return e.name; })).should.eventually.be.an('array').with.length(2).and.contain('test1','test2');
+				});
+			});
+		});
+		
+		it('should list the known linkable libraries if not in a project with --list', function () {
+			return resetEnv().then(function () {
+				return setupLinks();
+			}).then(function () {
+				return getOpts({cwd: testHome, list: true});
+			}).then(function (opts) {
+				return link(opts).then(function (links) {
+					return links.map(function (e) { return e.name; });
+				});
+			}).then(function (links) {
+				return resolve(links).should.eventually.be.an('array').with.length(3).and.contain('test1','test2','test3');
+			});
+		});
+		
+		it('should list the known linkable libraries with --list-linkable', function () {
+			return resetEnv().then(function () {
+				return setupLinks();
+			}).then(function () {
+				return getOpts({cwd: testProj, listLinkable: true});
+			}).then(function (opts) {
+				return link(opts).then(function (links) {
+					return links.map(function (e) { return e.name; });
+				});
+			}).then(function (links) {
+				return resolve(links).should.eventually.be.an('array').with.length(3).and.contain('test1','test2','test3');
+			});
+		});
 	});
 	
 	

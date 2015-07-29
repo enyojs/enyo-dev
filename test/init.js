@@ -229,25 +229,11 @@ describe('enyo init', function () {
 				return getOpts({cwd: testEmpty, library: true}).then(function (opts) {
 					return init(opts).then(function () {
 						return all([
-							resolve(opts.env.config.json).should.eventually.deep.equal({name: 'empty'}),
+							resolve(opts.env.config.json).should.eventually.deep.equal({name: 'empty', library: true}),
 							opts.env.get('libDir').then(function (libDir) {
 								return fs.statAsync(path.join(testEmpty, libDir)).should.eventually.be.rejected
 							})
 						]);
-					});
-				});
-			});
-		});
-		
-		it('should automatically make a library linkable when --library is set', function () {
-			return resetEnv().then(function () {
-				return getOpts({cwd: testEmpty, library: true}).then(function (opts) {
-					return init(opts).then(function () {
-						return opts.env.get('name').then(function (name) {
-							return fs.lstatAsync(path.join(opts.env.userLinks, name)).then(function (stat) {
-								return stat.isSymbolicLink();
-							}).should.eventually.be.true;
-						});
 					});
 				});
 			});

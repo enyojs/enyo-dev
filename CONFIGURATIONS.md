@@ -1,3 +1,5 @@
+- primary tool for determining if a project is an enyo project is the existence of the .enyoconfig file and a "name" property
+- completely re-worked the find-links command
 - user configuration files have changed location/names and use-case
 - new project defaults config file
 - options have changed 
@@ -7,6 +9,7 @@
 - true separation of package/project configuration properties
 	- see lists to know which will be in which files
 - the "link" property is now "links"
+- in nearly all commands output is reserved for errors, very few exceptions
 
 
 ## Enyo Developer Tools
@@ -39,7 +42,8 @@
 	- [config](#commands-config)
 	- [init](#commands-init)
 	- [link](#commands-link)
-	- [unlinke](#commands-unlink)
+	- [unlink](#commands-unlink)
+	- [find-links](#commands-find-links)
 
 ### <a name="setup"></a>Setup
 
@@ -320,6 +324,21 @@ Options:
    -g, --global        If set, the target library will be unlinked from the user's environment or, if set with the --unlink-all flag will unlink all linkable projects from the users's environment as if they were outside of a project directory.
 
 Unlink the target library from the current project or, if linkable, remove the current library from linkable libraries by other projects.
+```
+
+#### <a name="commands-find-links"></a>find-links `enyo find-links`
+
+```bash
+Usage: enyo find-links [target] [options]
+
+target     The target directory to begin searching for linkable libraries. Defaults to the current working directory.
+
+Options:
+   -c, --config-file   Set this to a custom configuration file, otherwise defaults to .enyoconfig in the target working directory.
+   -i, --interactive   Various commands may need user input. To avoid interactive sessions and always use the built-in resolution options set this to false.
+   --script-safe       When executing commands within an automated script or without an active terminal set this flag to true.
+
+Quickly find libraries and make them linkable by other projects. It executes a recursive search but igores symbolic links. This will only find libraries that have been properly initialized as a library and uses the "name" value of their configuration. If a duplicate library is encountered  and interactive mode is disabled the first found will be given presedence.
 ```
 
 ##### Footnotes

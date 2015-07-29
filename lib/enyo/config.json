@@ -1,3 +1,4 @@
 {
-  "interactive": true
+  "interactive": true,
+  "scriptSafe": false
 }

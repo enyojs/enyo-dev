@@ -212,39 +212,6 @@ describe('enyo config', function () {
 				});
 			});
 			
-			it.skip('should be able to add a library by name, source and target at the same time', function () {
-				opts.target = 'defaults.libraries';
-				opts.value = 'enyo-fake7@git@github.com:enyojs/enyo-fake7.git#123456,enyo-fake8@https://github.com/enyojs/enyo-fake8.git#master';
-				opts.array = true;
-				return config(opts).then(function () {
-					return getOpts().then(function (opts) {
-						return all([
-							getOpts({get: true, env: opts.env, target: 'defaults.libraries'}).then(function (opts) {
-								return config(opts).should.eventually.be.an('array').and.contains('enyo-fake7', 'enyo-fake8');
-							}),
-							getOpts({get: true, env: opts.env, target: 'defaults.sources'}).then(function (opts) {
-								return config(opts).then(function (sources) {
-									return all([
-										resolve(sources).should.eventually.include.keys('enyo-fake7', 'enyo-fake8'),
-										resolve(sources['enyo-fake7']).should.eventually.exist.and.to.equal('git@github.com:enyojs/enyo-fake7.git'),
-										resolve(sources['enyo-fake8']).should.eventually.exist.and.to.equal('https://github.com/enyojs/enyo-fake8.git')
-									]);
-								});
-							}),
-							getOpts({get: true, env: opts.env, target: 'defaults.targets'}).then(function (opts) {
-								return config(opts).then(function (targets) {
-									return all([
-										resolve(targets).should.eventually.include.keys('enyo-fake7', 'enyo-fake8'),
-										resolve(targets['enyo-fake7']).should.eventually.exist.and.to.equal('123456'),
-										resolve(targets['enyo-fake8']).should.eventually.exist.and.to.equal('master')
-									]);
-								});
-							})
-						]);
-					});
-				});
-			});
-			
 		});
 		
 		context('--reset', function () {

@@ -121,6 +121,17 @@ describe('Environment', function () {
 			expect(env.user.get('libDir')).to.be.equal('lib');
 			expect(env.user.get('libraries')).to.be.an('array').with.length.above(2);
 		});
+		
+		it('should return interactive as false if --script-safe is set', function () {
+			env.user.json.scriptSafe = true;
+			env.user.json.interactive = true;
+			return env.get('interactive').should.eventually.be.false;
+		});
+		
+		it('should return true if interactive is set', function () {
+			env.user.json.scriptSafe = false;
+			return env.get('interactive').should.eventually.be.true;
+		});
 	});
 
 });
