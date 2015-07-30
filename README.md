@@ -28,6 +28,7 @@
 		- [Project default configuration](#env-user-project)
 		- [Links directory](#env-user-links)
 	- [Script/Server](#env-script)
+	- [Project](#env-project)
 - [Commands](#commands)
 	- [config](#commands-config)
 	- [init](#commands-init)
@@ -165,7 +166,7 @@ The project defaults configuration file is a JSON file at `~/.enyo/defaults` tha
   
   // a list of libraries to include in the project as a link instead of a copy of
   // the repository
-  "link": [],
+  "links": [],
   
   // set this to true to always link the libraries in projects
   "linkAllLibs": false
@@ -174,12 +175,45 @@ The project defaults configuration file is a JSON file at `~/.enyo/defaults` tha
 
 ##### <a name="env-user-links"></a>Links directory `~/.enyo/links`
 
-When using the _link_ option within your projects the tools will create a separate directory at `~/.enyo/links` where it stores the global link to your local libraries. Subsequent requests in projects will link to _this location_ so you can modify the location of your library without invalidating all of the projects that may be linked to it. For more information on using _links_ in your development environment see the documentation below.
+When using the _links_ option within your projects the tools will create a separate directory at `~/.enyo/links` where it stores the global link to your local libraries. Subsequent requests in projects will link to _this location_ so you can modify the location of your library without invalidating all of the projects that may be linked to it. For more information on using _links_ in your development environment see the documentation below.
 
 
 #### <a name="env-script"></a>Scripts/Servers
 
 Often when using the development tools it is necessary to run non-interactive commands and avoid unnecessary environment setup that will be reset on each subsequent run. Please use the `--script-safe` flag for any command issued to disable interactive mode and keep from generating user-level configuration files. This also ensures that separate commands can safely be executed in parallel (multiple jobs) without race-conditions.
+
+#### <a name="env-project"></a>Project
+
+A project's configuration is determined by properties found in the `.enyoconfig` configuration file and the `package.json` file. Both files consist of JSON with specific properties. The available properties for the `.enyoconfig` file are those posted for the [defaults](#env-user-project). The properties found in the `package.json` file are special because they are _directly related to the package they define_.
+
+The actual specification for a `package.json` file are part of the [CommonJS Specification for packages](http://wiki.commonjs.org/wiki/Packages/1.1). The options we add are a superset of options that can be defined for _any package_ in your project's and libraries. This is why they are defined in the `package.json` and not in the `.enyoconfig` file. Here are the additional properties we support in the `package.json` file:
+
+```bash
+{
+  // this is an array of file paths or glob patterns relative to this
+  // package.json file that will be included as assets in every build
+  "assets": [],
+  
+  // this is an array of file paths or glob patterns relative to this
+  // package.json file that will be included as assets only in
+  // development builds (can be useful for scaffold/test data
+  "devAssets": [],
+  
+  // this is an array of file paths or glob patterns relative to this
+  // package.json file that will be included as CSS/Less styling when
+  // this package (or library) is included
+  "styles": [],
+  
+  // this is a part of the CommonJS Specification for packages but is
+  // used by our build-tools to determine the entry file for the
+  // package when it is included
+  "main": "index.js",
+  
+  // this is ONLY USED BY LIBRARIES to direct the build tools where to
+  // begin their search for modules when they are requested 
+  "moduleDir": "lib"
+}
+```
 
 ### <a name="commands"></a>Commands
 

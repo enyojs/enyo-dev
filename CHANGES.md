@@ -1,47 +1,27 @@
 # Changes in this release
 
-#### INSTALLATION / UPGRADE INSTRUCTIONS
-
-Before you do anything else, ensure that you follow these directions when upgrading from your current version of _enyo-dev_ to the latest release. The tools still require a local copy of the source. Note that this version requires node version 0.12.2 or higher. To check your version of node use the following command:
-
-```bash
-node --version
-```
-
-##### Clean Install
-
-If you follow these instructions for a clean install on a system that has never had _enyo-dev_ then it will be easy to upgrade or test patch-fixes.
-
-```bash
-git clone https://github.com/enyojs/enyo-dev.git
-cd enyo-dev
-# if there is a version, use the next line and replace the version as appropriate
-git checkout 0.5.1
-npm install
-npm link
-```
-
-##### Upgrade
-
-If you already have a local clone of _enyo-dev_ and need to upgrade follow these instructions from the root of the local repository.
-
-```bash
-git pull
-# if there is a version, use the next line and replace the version as appropriate
-git checkout 0.5.1
-npm install
-npm prune
-npm link
-```
+> For installation and upgrade instructions, see [the installation and upgrade guide in the documentation](README.md#setup-install). See [here for requirements](README.md#setup-reqs).
 
 ## Overview (0.5.1)
 
+* Make sure to READ ALL OF THE DOCUMENTATION AND EXAMPLES in the new and improved [README.md](README.md) documentation
+* The primary tool for determining if a project is an enyo project is the existence of the [.enyoconfig](README.md#env-user-project) file and a "name" property
+* Completely re-worked the [find-links](README.md#commands-find-links) command
+* [User configuration files](README.md#env-user-project) have changed location/names and use-case
+* New project defaults [config file](README.md#env-user-project)
+* The [configuration options have changed](README.md#env-user-project)
+* There is a new [--script-safe flag](README.md#env-script) for scripts/server environments
+* The configuration options have been cleanly separated by concerns between a project's [.enyoconfig](README.md#env-user-project) and those available in the [package.json](README.md#env-project) files, make sure to be aware of those changes
+* The "link" property is now "links" in the [.enyoconfig](README.md#env-user-project) file
+* For nearly all commands output is reserved for errors with very few exceptions
+* As stated before, many of the command-line options for `enyo pack` (and subsequently `enyo serve`) could be specified from the project's [package.json](README.md#env-project) file, this is no longer the case as there is a distinct separation from module/package options and tools/configuration options for [.enyoconfig](README.md#env-user-project), read the documentation to see which options belong where
 * Removed dependence on the nodegit library opting instead to use gift (uses local version of `git`)
-* Using private repositories, tags, commits and branches are all supported in the `"sources"` object of the `.enyoconfig` file
+* The sources object now only maps to remote source URI's and the tag/branch/commit-sha's are now in a `"targets"` object
+* Using private repositories, tags, commits and branches are all supported in the `"targets"` object of the `.enyoconfig` file
 * Updated support for `--library` mode to also be able to map relative asset paths
 * Cache file will now appropriately be placed in the project directory even when built from a different location
 * The default cache-file is now `.enyocache` instead of `.e_cache`
-* Updated the default configuration file structure (`.enyoconfig`) for both the global-user version and the local project version - this is automatically updated when you run `enyo init` and will preserve manual changes
+* Updated the default configuration file structure (`.enyoconfig`) for both the global-user version and the local project version - this is automatically updated when you run `enyo init` and will preserve customizations
 * Fixed glob-pattern asset handling mechanism to work as expected
 	* NOTE: Use this pattern for grabbing ALL files in an assets directory example: `assets/**/*?(.*)` which will properly grab files of the form `LICENSE` and `image.png` anywhere in the tree
 	* This fix also applies to awkward directory and file names that include `.`
