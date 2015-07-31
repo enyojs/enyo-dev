@@ -31,6 +31,8 @@
 	* `enyo link enyo,moonstone,svg` (link multiple libraries at the same time)
 	* `enyo unlink enyo,svg` (unlink multiple libraries at the same time)
 	* `enyo unlink -U` (unlink all linked-libraries in the current project)
+* The default `"paths"` array is now empty but the tools will _always_ default to checking the defined `"libDir"` if it was _not_ in the `"paths"` array after all specified paths have been exhausted
+* The `"isLibrary"` configuration option (`--library` command-line flag) is now `"library"` in the configuration for consistency
 
 
 ## Previous (0.5.0)

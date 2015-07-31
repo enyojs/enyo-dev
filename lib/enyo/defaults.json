@@ -2,9 +2,7 @@
   "title": "",
   "name": "",
   "libDir": "lib",
-  "paths": [
-    "lib"
-  ],
+  "paths": [],
   "libraries": [
     "enyo",
     "layout",
@@ -42,5 +40,34 @@
     "enyo-ilib": "2.6.0-dev"
   },
   "links": [],
-  "linkAllLibs": false
+  "linkAllLibs": false,
+  "logLevel": "warn",
+  "production": false,
+  "devMode": true,
+  "cache": true,
+  "resetCache": false,
+  "trustCache": false,
+  "cacheFile": ".enyocache",
+  "clean": false,
+  "sourceMaps": true,
+  "externals": true,
+  "strict": false,
+  "skip": [],
+  "library": false,
+  "wip": false,
+  "outdir": "./dist",
+  "outfile": "index.html",
+  "lessPlugins": [],
+  "assetRoots": [],
+  "lessOnlyLess": false,
+  "minifyCss": false,
+  "inlineCss": true,
+  "outCssFile": "output.css",
+  "outJsFile": "output.js",
+  "inlineJs": true,
+  "templateIndex": "",
+  "watch": false,
+  "watchPaths": [],
+  "polling": false,
+  "pollingInterval": 100
 }
