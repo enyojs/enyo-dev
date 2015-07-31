@@ -22,7 +22,6 @@
   "library": true,
   "wip": false,
   "outdir": "dist",
-  "outfile": "index.html",
   "lessPlugins": [],
   "assetRoots": [],
   "lessOnlyLess": false,
