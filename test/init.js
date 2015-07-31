@@ -224,12 +224,14 @@ describe('enyo init', function () {
 			});
 		});
 		
-		it('should do minimal work when --library is set', function () {
+		it('should apply library defaults --library is set', function () {
 			return resetEnv().then(function () {
 				return getOpts({cwd: testEmpty, library: true}).then(function (opts) {
 					return init(opts).then(function () {
+						var f = clone(opts.env.system.library, true);
+						f.name = 'empty';
 						return all([
-							resolve(opts.env.config.json).should.eventually.deep.equal({name: 'empty', library: true}),
+							resolve(opts.env.config.json).should.eventually.deep.equal(f),
 							opts.env.get('libDir').then(function (libDir) {
 								return fs.statAsync(path.join(testEmpty, libDir)).should.eventually.be.rejected
 							})
