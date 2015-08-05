@@ -60,7 +60,7 @@
     "minimist": "^1.1.1",
     "nomnom": "^1.8.1",
     "osenv": "^0.1.2",
-    "resolution-independence": "^0.0.2",
+    "resolution-independence": "^0.0.3",
     "slash": "~1.0.0",
     "through2": "^0.6.3",
     "uglify-js": "^2.4.17",
