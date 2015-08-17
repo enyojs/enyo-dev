@@ -28,30 +28,27 @@ mixin bundleSection(bundle)
 		.modules
 			a(name='bundle-#{bundle.name}-modules')
 			h3 Modules
-			.menu
-				ul
-					for module in bundle.modules
-						li: +moduleLink(module.name)
+			ul.columns
+				for module in bundle.modules
+					li: +moduleLink(module.name)
 		.dependencies
 			a(name='bundle-#{bundle.name}-dependencies')
 			h3 Dependencies
-			.menu
-				if bundle.dependencies.length
-					ul
-						for name in bundle.dependencies
-							li: +bundleLink(name)
-				else
-					p No dependencies
+			if bundle.dependencies.length
+				ul.columns
+					for name in bundle.dependencies
+						li: +bundleLink(name)
+			else
+				p No dependencies
 		.dependents
 			a(name='bundle-#{bundle.name}-dependents')
 			h3 Dependents
-			.menu
-				if bundle.dependents.length
-					ul
-						for name in bundle.dependents
-							li: +bundleLink(name)
-				else
-					p No dependents
+			if bundle.dependents.length
+				ul.columns
+					for name in bundle.dependents
+						li: +bundleLink(name)
+			else
+				p No dependents
 
 // - bundle link for a given name for consistency
 mixin bundleLink(name)
@@ -96,41 +93,37 @@ mixin moduleSection(module)
 		.dependencies
 			a(name='module-#{module.name}-dependencies')
 			h3 Dependencies
-			.menu
-				if module.dependencies.length
-					ul
-						for name in module.dependencies
-							li: +moduleLink(name)
-				else
-					p No dependencies
+			if module.dependencies.length
+				ul.columns
+					for name in module.dependencies
+						li: +moduleLink(name)
+			else
+				p No dependencies
 		.dependents
 			a(name='module-#{module.name}-dependents')
 			h3 Dependents
-			.menu
-				if module.dependents.length
-					ul
-						for name in module.dependents
-							li: +moduleLink(name)
-				else
-					p No dependents
+			if module.dependents.length
+				ul.columns
+					for name in module.dependents
+						li: +moduleLink(name)
+			else
+				p No dependents
 		if module.package
 			.styles
 				a(name='module-#{module.name}-styles')
 				h3 Styles
-				.menu
-					if module.styles.length
-						ul
-							for file in module.styles
-								li= file
-					else
-						p No styles
+				if module.styles.length
+					ul.columns
+						for file in module.styles
+							li= file
+				else
+					p No styles
 			.assets
 				a(name='module-#{module.name}-assets')
 				h3 Assets
-				.menu
-					if module.assets.length
-						ul
-							for file in module.assets
-								li= file
-					else
-						p No Assets
+				if module.assets.length
+					ul.columns
+						for file in module.assets
+							li= file
+				else
+					p No Assets
