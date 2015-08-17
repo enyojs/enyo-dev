@@ -27,6 +27,8 @@ html(lang="en")
 			ul
 				each module in modules
 					li= module.relName
+		#bundles-graph
+		#modules-graph
 		each script in scripts
 			if script.src
 				script(src=script.src)
