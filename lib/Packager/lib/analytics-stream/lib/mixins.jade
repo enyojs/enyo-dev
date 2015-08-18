@@ -11,7 +11,7 @@ mixin bundleSection(bundle)
 					td: a(href='#bundle-#{bundle.name}-modules') modules
 					td= bundle.modules.length
 				tr
-					td ~size
+					td size*
 					td 0
 				tr
 					td: a(href='#bundle-#{bundle.name}-dependencies') dependencies
