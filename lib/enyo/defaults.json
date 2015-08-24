@@ -71,5 +71,6 @@
   "polling": false,
   "pollingInterval": 100,
   "headScripts": [],
-  "tailScripts": []
+  "tailScripts": [],
+  "promisePolyfill": false
 }
