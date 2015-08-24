@@ -69,5 +69,7 @@
   "watch": false,
   "watchPaths": [],
   "polling": false,
-  "pollingInterval": 100
+  "pollingInterval": 100,
+  "headScripts": [],
+  "tailScripts": []
 }
