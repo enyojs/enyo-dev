@@ -73,5 +73,6 @@
   "headScripts": [],
   "tailScripts": [],
   "promisePolyfill": false,
-  "styleOnly": false
+  "styleOnly": false,
+  "lessVars": []
 }
