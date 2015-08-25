@@ -33,6 +33,12 @@
 	* `enyo unlink -U` (unlink all linked-libraries in the current project)
 * The default `"paths"` array is now empty but the tools will _always_ default to checking the defined `"libDir"` if it was _not_ in the `"paths"` array after all specified paths have been exhausted
 * The `"isLibrary"` configuration option (`--library` command-line flag) is now `"library"` in the configuration for consistency
+* If a `.gitignore` file already exists in a project it will remain untouched by `enyo init`
+* Added `--version` flag for the root `enyo` command (e.g. run `enyo --version` from 0.5.1 and forward)
+* Added `--head-scripts` and `--tail-scripts` options to `enyo pack` to arbitrarily add scripts before or after other scripts
+* Added the `--less-var` list option to `enyo pack` to be able to specify Less variables and values from the command-line
+* Added the `--style-only` flag to `enyo pack` to only produce the style files from a particular build target
+* Added the `--promise-polyfill` option (false by default) to include a fallback polyfill for platforms that do not have native Promise support
 
 
 ## Previous (0.5.0)
