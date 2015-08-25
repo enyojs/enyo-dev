@@ -353,6 +353,7 @@ All of the tools require various commands issued from the command-line. Below ar
 -c, --config-file
 -i, --interactive
 --script-safe
+-v, --version
 ```
 
 The `-c, --config-file` option is a relative path to a custom configuration file (the default is `.enyoconfig`). Note that, if the file doesn't exist it will be ignored and the command will continue using the defaults and user-level configurations.
@@ -360,6 +361,8 @@ The `-c, --config-file` option is a relative path to a custom configuration file
 The `-i, --interactive` option is a boolean indicating whether any given option should enter interactive-mode (if necessary) to receive user input to resolve a course of action that has multiple paths. If interactive mode is disabled it will fall back to a default path that varies by the command.
 
 The `--script-safe` option is a boolean indicating that the requested command should be executed in a manner that is safe for scripts and server environments. See [Scripts/Servers](#env-script) for more information.
+
+The `-v, --version` option simply prints the current version of the tools and exits.
 
 #### <a name="commands-config"></a>config - `enyo config`
 
