@@ -14,7 +14,8 @@
     "enyo": "./bin/enyo.js"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/mocha",
+    "postinstall": "node ./bin/upgrade.js"
   },
   "author": "Cole Davis <cole.davis@lge.com>",
   "maintainers": [
