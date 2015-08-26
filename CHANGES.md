@@ -39,6 +39,13 @@
 * Added the `--less-var` list option to `enyo pack` to be able to specify Less variables and values from the command-line
 * Added the `--style-only` flag to `enyo pack` to only produce the style files from a particular build target
 * Added the `--promise-polyfill` option (false by default) to include a fallback polyfill for platforms that do not have native Promise support
+* Fixed several production mode output errors
+* Fixed style ordering issues (especially in library builds)
+* Uses faster algorithm when not using `request` functionality and faster algorithm when you are
+* The default entry module can be referenced from the console as `"index"` e.g. `require("index")`
+* Wrapped output JavaScript no longer uses SHA1 hashes to identify
+* Normalized behavior of tools with regards to paths -- all CLI paths are relative to the current working directory whereas paths evaluated from configuration files is relative to the package itself
+* Projects now need a `.enyoconfig` file, libraries are initialized with `enyo config --library` and configuration for other projects can be generated without downloading dependencies with the `--no-dependencies` flag e.g. `enyo init --no-dependencies` and `enyo init --library`
 
 
 ## Previous (0.5.0)
