@@ -46,6 +46,7 @@
 * Wrapped output JavaScript no longer uses SHA1 hashes to identify
 * Normalized behavior of tools with regards to paths -- all CLI paths are relative to the current working directory whereas paths evaluated from configuration files is relative to the package itself
 * Projects now need a `.enyoconfig` file, libraries are initialized with `enyo config --library` and configuration for other projects can be generated without downloading dependencies with the `--no-dependencies` flag e.g. `enyo init --no-dependencies` and `enyo init --library`
+* The enyo-cordova library has been deprecated and as such removed as a default library from enyo-dev
 
 
 ## Previous (0.5.0)
