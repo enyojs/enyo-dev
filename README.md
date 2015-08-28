@@ -143,7 +143,6 @@ The project defaults configuration file is a JSON file at `~/.enyo/defaults` tha
     "onyx",
     "spotlight",
     "enyo-webos",
-    "enyo-cordova",
     "enyo-ilib"
   ],
   
@@ -157,7 +156,6 @@ The project defaults configuration file is a JSON file at `~/.enyo/defaults` tha
     "onyx": "https://github.com/enyojs/onyx.git",
     "spotlight": "https://github.com/enyojs/spotlight.git",
     "enyo-webos": "https://github.com/enyojs/enyo-webos.git",
-    "enyo-cordova": "https://github.com/enyojs/enyo-cordova.git",
     "enyo-ilib": "https://github.com/enyojs/enyo-ilib.git"
   },
   
@@ -173,7 +171,6 @@ The project defaults configuration file is a JSON file at `~/.enyo/defaults` tha
     "onyx": "2.6.0-dev",
     "spotlight": "2.6.0-dev",
     "enyo-webos": "2.6.0-dev",
-    "enyo-cordova": "2.6.0-dev",
     "enyo-ilib": "2.6.0-dev"
   },
   
