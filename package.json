@@ -1,6 +1,6 @@
 {
   "name": "enyo-dev",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Packaging and developer management tools for Enyo 2.x",
   "main": "index.js",
   "repository": "https://github.com/enyojs/enyo-dev",
