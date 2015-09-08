@@ -7,6 +7,7 @@
 * Fixed a bug for the `enyo find-links` command that would not allow an absolute path to be passed in from the command line
 * Added correct implementation for `enyo config -r libraries [library]` to automatically remove the `sources` and `targets` entry for the named libraries as was previously documented
 * Fixed issue where single-file projects would not build properly
+* Fixed issue where using `enyo pack` could potentially create a target directory if it didn't already exist
 
 ## Overview (0.5.1)
 
