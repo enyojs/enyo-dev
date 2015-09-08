@@ -2,6 +2,10 @@
 
 > For installation and upgrade instructions, see [the installation and upgrade guide in the documentation](README.md#setup-install). See [here for requirements](README.md#setup-reqs).
 
+## Overivew (0.5.3)
+
+* Fixed a bug for the `enyo find-links` command that would not allow an absolute path to be passed in from the command line
+
 ## Overview (0.5.1)
 
 * Make sure to READ ALL OF THE DOCUMENTATION AND EXAMPLES in the new and improved [README.md](README.md) documentation
