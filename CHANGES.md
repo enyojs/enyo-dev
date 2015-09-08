@@ -5,6 +5,7 @@
 ## Overivew (0.5.3)
 
 * Fixed a bug for the `enyo find-links` command that would not allow an absolute path to be passed in from the command line
+* Added correct implementation for `enyo config -r libraries [library]` to automatically remove the `sources` and `targets` entry for the named libraries as was previously documented
 
 ## Overview (0.5.1)
 
