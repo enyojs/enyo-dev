@@ -567,6 +567,25 @@ describe('enyo config', function () {
 				});
 			});
 			
+			it('should be able to remove the targets and sources entry of a removed library', function () {
+				return resetEnv().then(function () {
+					return getOpts({cwd: testProj, target: 'libraries', value: 'canvas,onyx', remove: true}).then(function (opts) {
+						return config(opts).then(function () {
+							opts.get = true;
+							opts.remove = false;
+							opts.value = null;
+							return config(opts).should.eventually.be.an('array').and.not.contain('canvas').and.not.contain('onyx');
+						}).then(function () {
+							opts.target = 'sources';
+							return config(opts).should.eventually.be.an('object').and.not.to.include.keys('onyx', 'canvas');
+						}).then(function () {
+							opts.target = 'targets';
+							return config(opts).should.eventually.be.an('object').and.not.to.include.keys('onyx', 'canvas');
+						});
+					});
+				});
+			});
+			
 		});
 		
 		context('--reset', function () {
