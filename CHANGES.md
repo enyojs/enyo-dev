@@ -8,8 +8,9 @@
 * Added correct implementation for `enyo config -r libraries [library]` to automatically remove the `sources` and `targets` entry for the named libraries as was previously documented
 * Fixed issue where single-file projects would not build properly
 * Fixed issue where using `enyo pack` could potentially create a target directory if it didn't already exist
+* When packaging libraries using the `--style-only` flag you can now use the `--css-outfile` flag to designate the filename
 
-## Overview (0.5.1)
+## Previous (0.5.1)
 
 * Make sure to READ ALL OF THE DOCUMENTATION AND EXAMPLES in the new and improved [README.md](README.md) documentation
 * The primary tool for determining if a project is an enyo project is the existence of the [.enyoconfig](README.md#env-user-project) file and a "name" property
