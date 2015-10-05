@@ -1,5 +1,9 @@
 'use strict';
 
+require('babel/register')({
+	extensions: ['.es6']
+});
+
 var
 	Packager = require('./lib/Packager'),
 	Watcher = require('./lib/Watcher'),
