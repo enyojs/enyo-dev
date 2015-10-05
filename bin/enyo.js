@@ -2,6 +2,10 @@
 
 'use strict';
 
+require('babel/register')({
+	extensions: ['.es6']
+});
+
 var
 	nom = require('nomnom'),
 	options = require('../lib/enyo/options'),
