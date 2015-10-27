@@ -1,5 +1,9 @@
 'use strict';
 
+require('babel/register')({
+	extensions: ['.es6']
+});
+
 var
 	path = require('path'),
 	os = require('os');
