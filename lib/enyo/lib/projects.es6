@@ -12,21 +12,29 @@ function projects (opts) {
 export default projects;
 
 function register (opts) {
-	return opts.env.get('name').then(name => {
-		// should never happen so mostly for debugging to determine if we are somehow reaching it
-		if (!name) throw new Error('cannot register a project without a name');
-		return opts.env.projects.set(name, opts.env.cwd, true);
+	// this doesn't belong here but was the only reasonable short-term solution
+	return opts.env.get('scriptSafe').then(scriptSafe => {
+		return scriptSafe ? Promise.resolve() : opts.env.get('name').then(name => {
+			// should never happen so mostly for debugging to determine if we are somehow reaching
+			// it
+			if (!name) throw new Error('cannot register a project without a name');
+			return opts.env.projects.set(name, opts.env.cwd, true);
+		});
 	});
 }
 
 function unregister (opts) {
-	return opts.env.get('name').then(name => {
-		// should never happen so mostly for debugging to determine if we are somehow reaching it
-		if (!name) throw new Error('cannot unregister a project without a name');
-		return opts.env.projects.set(name, opts.env.cwd, true, null, true).then(() => {
-			return opts.env.projects.get(name);
-		}).then(entries => {
-			if (!entries || entries.length === 0) return opts.env.projects.set(name, undefined, true, null, true);
+	// this doesn't belong here but was the only reasonable short-term solution
+	return opts.env.get('scriptSafe').then(scriptSafe => {
+		return scriptSafe ? Promise.resolve() : opts.env.get('name').then(name => {
+			// should never happen so mostly for debugging to determine if we are somehow reaching
+			// it
+			if (!name) throw new Error('cannot unregister a project without a name');
+			return opts.env.projects.set(name, opts.env.cwd, true, null, true).then(() => {
+				return opts.env.projects.get(name);
+			}).then(entries => {
+				if (!entries || entries.length === 0) return opts.env.projects.set(name, undefined, true, null, true);
+			});
 		});
 	});
 }
