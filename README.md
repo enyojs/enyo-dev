@@ -1,10 +1,10 @@
 ## Enyo Developer Tools
-> version 0.5.1
+> version 0.5.3
 
 > __SPECIAL NOTICE__
 > 
 > There have been breaking changes in the configurations and environment setup between
-> versions `0.5.0` and `0.5.1`. The new environment structure is fully explained 
+> versions `0.5.0` and `0.5.3`. The new environment structure is fully explained 
 > in the documentation below and with notes in [CHANGES.md](CHANGES.md). It is 
 > __highly recommended__ that you re-run `enyo init` in all of your working 
 > projects as it will upgrade your local configuration to the current standard 
@@ -62,12 +62,12 @@ node --version
 
 #### <a name="setup-install"></a>Installation
 
-The easiest way to manage your installation of the tools is to use the ~~[npm package manager](#setup-npm)~~<sup>[1](#fn1)</sup>. In other cases you can follow the directions below for a [manual installation](#setup-manual).
+The easiest way to manage your installation of the tools is to use the [npm package manager](#setup-npm). In other cases you can follow the directions below for a [manual installation](#setup-manual).
 
-##### <a name="setup-npm"></a>~~NPM Installation~~<sup>[1](#fn1)</sup>
+##### <a name="setup-npm"></a>NPM Installation
 
 ```bash
-# not currently available
+npm install -g enyo-dev
 ```
 
 ##### <a name="setup-manual"></a>Manual Installation
@@ -78,11 +78,13 @@ A manual installation means you have a local _clone_ of the source code. This gi
 
 For a clean install on a system that does not currently have _enyo-dev_ installed follow these directions:
 
+> Note that the documented version may be the _next_ version to be released and thus not yet available.
+
 ```bash
 git clone https://github.com/enyojs/enyo-dev.git
 cd enyo-dev
 # if there is a version, use the next line and replace the version as appropriate
-git checkout 0.5.1
+git checkout 0.5.3
 npm install
 npm link
 ```
@@ -94,7 +96,7 @@ If you already have a local clone of _enyo-dev_ and need to upgrade follow these
 ```bash
 git pull
 # if there is a version, use the next line and replace the version as appropriate
-git checkout 0.5.1
+git checkout 0.5.3
 npm install
 npm prune
 npm link
@@ -1018,9 +1020,6 @@ and
 
 `src/module/assets/icon.png` _could_ (but shouldn't) be referenced as `src/module/assets/icon.png`
 
-
-##### Footnotes
-<a name="fn1">1</a>: The npm package is not yet available, you will need to manually clone the repository and install it following the commands listed for [manual installation](#setup-manual).
 
 
 ## Copyright and License Information
