@@ -18,4 +18,4 @@ html(lang="en")
 				script(src=script.src)
 			else
 				script!= script.contents
-	body
+	body.enyo-unselectable
