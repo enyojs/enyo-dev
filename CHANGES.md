@@ -9,6 +9,7 @@
 * Fixed issue where single-file projects would not build properly
 * Fixed issue where using `enyo pack` could potentially create a target directory if it didn't already exist
 * When packaging libraries using the `--style-only` flag you can now use the `--css-outfile` flag to designate the filename
+* The command `enyo serve` and all related aliases have been removed
 
 ## Previous (0.5.1)
 

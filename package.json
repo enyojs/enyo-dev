@@ -7,8 +7,6 @@
   "bin": {
     "enyo-pack": "./bin/enyo-pack.js",
     "epack": "./bin/enyo-pack.js",
-    "enyo-serve": "./bin/enyo-serve.js",
-    "eserve": "./bin/enyo-serve.js",
     "enyo-gen": "./bin/enyo-gen.js",
     "egen": "./bin/enyo-gen.js",
     "enyo": "./bin/enyo.js"
@@ -32,7 +30,7 @@
     "archy": "^1.0.0",
     "array-uniq": "^1.0.2",
     "babel-core": "^6.3.13",
-	"babel-register": "^6.3.13",
+    "babel-register": "^6.3.13",
     "babel-preset-es2015": "^6.3.13",
     "bluebird": "^3.0.6",
     "bunyan": "^1.3.5",

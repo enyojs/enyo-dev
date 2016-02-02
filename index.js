@@ -6,8 +6,7 @@ require('babel-register')({
 
 var
 	Packager = require('./lib/Packager'),
-	Watcher = require('./lib/Watcher'),
-	Server = require('./lib/Server');
+	Watcher = require('./lib/Watcher');
 
 var
 	setup = require('./lib/setup');
@@ -19,13 +18,6 @@ exports.package = function (opts) {
 	}).then(function (watch) {
 		if (watch) return exports.watch(opts);
 		else return new Packager(opts).run();
-	});
-};
-
-exports.serve = function (opts) {
-	opts = opts || {};
-	return setup(opts).then(function (opts) {
-		return new Server(opts).run();
 	});
 };
 
