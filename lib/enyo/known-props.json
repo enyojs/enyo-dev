@@ -1,8 +1,6 @@
 {
   "libraries": "array",
   "sources": "object",
-  "links": "array",
-  "linkAllLibs": "boolean",
   "libDir": "string",
   "paths": "array",
   "interactive": "boolean",

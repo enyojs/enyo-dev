@@ -1,4 +1,5 @@
 {
   "interactive": true,
-  "scriptSafe": false
+  "scriptSafe": false,
+  "defaultTemplate": ""
 }

@@ -36,8 +36,6 @@
     "enyo-webos": "2.6.0-dev",
     "enyo-ilib": "2.6.0-dev"
   },
-  "links": [],
-  "linkAllLibs": false,
   "logLevel": "warn",
   "production": false,
   "devMode": true,

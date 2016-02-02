@@ -10,6 +10,8 @@
 * Fixed issue where using `enyo pack` could potentially create a target directory if it didn't already exist
 * When packaging libraries using the `--style-only` flag you can now use the `--css-outfile` flag to designate the filename
 * The command `enyo serve` and all related aliases have been removed
+* The `enyo init` command has been rewritten to accommodate the "templates" feature being added, please review the command-line options for more information and to see what new flags have been added and which have been modified or dropped from the previous release
+* Add the "templates" feature and related command-line sub-command, please review the command-line options for more information
 
 ## Previous (0.5.1)
 
