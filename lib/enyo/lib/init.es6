@@ -6,11 +6,11 @@ import fs                   from 'fs-extra';
 import path                 from 'path';
 import clone                from 'clone';
 import {default as Promise} from 'bluebird';
-import cli                  from '../../cli-logger';
-import logger               from '../../logger';
 import {getLinkable}        from './link';
 import link                 from './link';
 import git                  from './git';
+import {fsync}              from '../../util-extra';
+import {default as logger,stdout}         from '../../logger';
 import {getTemplates, getDefaultTemplate} from './templates';
 
 
@@ -26,7 +26,7 @@ export default function init (opts) {
 	let   project   = opts.project && path.normalize(opts.project)
 		, template  = opts.template
 		, isLibrary = !! opts.library
-		, data;
+		, libs;
 
 	// set a default log level appropriate the any requested from the cli
 	log.level(opts.logLevel || 'warn');
@@ -45,10 +45,9 @@ export default function init (opts) {
 	}
 
 	if (opts.initLibs) {
-		data = getTemplates(opts)[template];
-		if (data.config.libraries && data.config.libraries.length) {
-			return initLibraries(project, template, data, opts);
-		}
+		return opts.env.get('libraries').then(libs => {
+			if (libs && libs.length) return initLibraries(project, template, libs, opts);
+		});
 	}
 	
 	return Promise.resolve();
@@ -64,14 +63,12 @@ function ensureProject (project) {
 		return false;
 	}
 
-	try {
-		fs.ensureDirSync(project);
-		log.trace(`Successfully ensured the requested project directory "${project}"`);
-	} catch (e) {
-		log.debug({error: e}, `Unable to ensure requested project directory "${project}"`);
+	let err = fsync.ensureDir(project);
+	if (err) {
+		log.debug(`Unable to ensure requested project directory "${project}"`, err);
 		return false;
 	}
-
+	log.debug(`Successfully ensured the requested project directory exists "${project}"`);
 	return true;
 }
 
@@ -85,6 +82,7 @@ function initTemplate (project, template, opts) {
 	let   templates = getTemplates(opts)
 		, data      = templates[template]
 		, name      = opts.name || path.basename(project)
+		, stat
 		, err;
 
 	if (!data) {
@@ -93,10 +91,19 @@ function initTemplate (project, template, opts) {
 	}
 
 	data = clone(data);
+	
+	stat = fsync.stat(data.path);
+	
+	if (!stat) {
+		log.debug(`The requested template "${template}" does not exist`);
+		return false;
+	}
+	
+	if      (stat.isDirectory())    err = fsync.copyDir(data.path, project, true);
+	else if (stat.isSymbolicLink()) err = fsync.copyLinkDir(data.path, project, true);
 
-	err = copy(data.path, project);
 	if (err) {
-		log.debug({error: err}, `Failed to copy template "${template}" (${data.path}) to "${project}"`);
+		log.debug(`Failed to copy template "${template}" (${data.path}) to "${project}"`, err);
 		return false;
 	}
 
@@ -104,7 +111,7 @@ function initTemplate (project, template, opts) {
 		// regardless of whether or not there was a package.json we sync this value
 		log.debug(`Updating package.json "name" value to "${name}" from "${data.package.name || 'none'}"`);
 		data.package.name = name;
-		err = writeJson(path.join(project, 'package.json'), data.package);
+		err = fsync.writeJson(path.join(project, 'package.json'), data.package);
 		if (err) {
 			log.debug({error: err}, `Failed to update the package.json for "${project}"`);
 			return false;
@@ -115,9 +122,9 @@ function initTemplate (project, template, opts) {
 		// we only want to update this file if it already exists
 		log.debug(`Updating the .enyoconfig file "name" to "${name}" from "${data.config.name}"`);
 		data.config.name = name;
-		err = writeJson(path.join(project, '.enyoconfig'), data.config);
+		err = fsync.writeJson(path.join(project, '.enyoconfig'), data.config);
 		if (err) {
-			log.debug({error: err}, `Failed to update the .enyoconfig for "${project}"`);
+			log.debug(`Failed to update the .enyoconfig for "${project}"`, err);
 			return false;
 		}
 	}
@@ -131,39 +138,9 @@ function initTemplate (project, template, opts) {
 	return true;
 }
 
-function copy (from, to) {
-	try {
-		fs.copySync(from, to);
-	} catch (e) {
-		return e;
-	}
-}
+function initLibraries (project, template, libs, opts) {
 
-function writeJson (file, data) {
-	try {
-		fs.writeJsonSync(file, data, {spaces: 2});
-	} catch (e) {
-		return e;
-	}
-}
-
-function ensureDir (target) {
-	try {
-		fs.ensureDirSync(target);
-	} catch (e) {
-		return e;
-	}
-}
-
-function getLocalStat (target) {
-	try {
-		return fs.lstatSync(target);
-	} catch (e) {};
-}
-
-function initLibraries (project, template, data, opts) {
-
-	log.debug(`Attempting to initialize libraries for "${project}" (${data.config.libraries.join(',')})`);
+	log.debug(`Attempting to initialize libraries for "${project}" (${libs.join(',')})`);
 
 	return new Promise((resolve, reject) => {
 		Promise.join(
@@ -182,16 +159,16 @@ function initLibraries (project, template, data, opts) {
 			if (!targets) targets = {};
 			if (!libDir)  libDir  = opts.env.system.defaults.libDir;
 
-			err = ensureDir(path.join(project, libDir));
+			err = fsync.ensureDir(path.join(project, libDir));
 			if (err) {
 				log.debug({error: err}, `Failed to ensure the library target directory for project "${project}" with "libDir" "${libDir}"`);
 				return reject(`Failed to ensure the library target directory "${path.join(project, libDir)}"`);
 			}
 
-			actions = data.config.libraries.map(name => {
+			actions = libs.map(name => {
 				
 				let   dest = path.join(project, libDir, name)
-					, stat = getLocalStat(dest);
+					, stat = fsync.stat(dest);
 				if (linkAll) {
 					if (!linkable[name]) {
 						log.warn(`Request to link all libraries but "${name}" is not available to be linked`);
@@ -199,8 +176,8 @@ function initLibraries (project, template, data, opts) {
 					} else if (stat && (stat.isSymbolicLink() || stat.isDirectory() || stat.isFile())) {
 						// debugging because no doubt this would happen and Roy would claim it wasn't working as intended...
 						log.debug(`The library "${name}" could not be linked even though it is available because the library already exists`);
-						if (stat.isSymbolicLink()) cli(`${name} is already a symbolic link, skipping`);
-						else cli(`skipping ${name} because it already exists as a ${stat.isDirectory() ? 'directory' : 'file'}`);
+						if (stat.isSymbolicLink()) stdout(`${name} is already a symbolic link, skipping`);
+						else stdout(`skipping ${name} because it already exists as a ${stat.isDirectory() ? 'directory' : 'file'}`);
 						return null;
 					}
 					log.debug(`Attempting to link library "${name}"`);

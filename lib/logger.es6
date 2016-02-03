@@ -26,5 +26,11 @@ process.on('unhandledRejection', (reason) => {
 	fatal(`A fatal error has been encountered, please use "trace" logging for more information on this issue`);
 });
 
+// to be able to print to the command line consistently for other es6 style modules
+function stdout (...args) {
+	// @todo format!!
+	console.log(...args);
+}
+
 export default log;
-export {fatal, log};
+export {fatal, log, stdout};
