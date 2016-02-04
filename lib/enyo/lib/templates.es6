@@ -3,7 +3,6 @@
 import colors                     from 'colors';
 import path                       from 'path';
 import {default as logger,stdout} from '../../logger';
-import {default as Promise}       from 'bluebird';
 import {fsync,spaces}             from '../../util-extra';
 import crypto                     from 'crypto';
 
@@ -18,14 +17,21 @@ function getLog (opts) {
 	return LOG;
 }
 
+function checkUser (opts) {
+	let log = getLog(opts);
+	if (opts.user === false) {
+		log.warn('Cannot complete template related request in non-user mode');
+		return false;
+	}
+	return true;
+}
+
 /*
 Manage templates. Returns a promise.
 */
 export default function templates ({opts, env}) {
 
 	let log = getLog(opts);
-
-	if (opts.user === false) return needUser(log);
 
 	if      (opts.action == 'add')     return add({opts, env, log});
 	else if (opts.action == 'remove')  return remove({opts, env, log});
@@ -34,16 +40,15 @@ export default function templates ({opts, env}) {
 	else if (opts.action == 'default') return setDefault({opts, env, log});
 	else {
 		log.warn(`Cannot complete${opts.action ? (' unknown action "' + opts.action + '"') : ' no action provided'}`);
+		return false;
 	}
-}
-
-function needUser (log) {
-	log.warn('Template actions require user-mode to be active');
 }
 
 function add ({opts, env, log}) {
 
 	log.debug(`Attempting to add template from "${opts.target || env.cwd}"`);
+	
+	if (!checkUser(opts)) return false;
 	
 	if (!opts.target) log.debug(`Using the current working directory as the target to add since no "target" was provided (${env.cwd})`);
 	
@@ -56,35 +61,46 @@ function add ({opts, env, log}) {
 			, name             = (pkg && pkg.name) || (config && config.name) || path.basename(target);
 	
 		log.debug(`Determined template "${target}" does exist and the name of the template is "${name}"`);
+		if (!pkg || !config) {
+			log.warn(`Target template "${name}" (${target}) does not have both a package.json and .enyoconfig file as required`);
+			return false;
+		}
 	
 		if (templates[name]) {
-			reject(`A template by the name "${name}" is already registered on the system and cannot be added again`);
+			log.warn(`A template by the name "${name}" is already registered on the system and cannot be added again`);
+			return false;
 		} else {
-			let   dest = path.join(opts.env.userTemplates, tmp())
+			let   dest = path.join(env.TEMPLATES, tmp())
 				, err  = fsync.link(target, dest);
 			if (!err) {
 				log.debug(`Successfully linked the requested template from "${target}" to "${dest}"`);
-				resolve();
+				return true;
 			} else {
-				log.debug({error: err.toString()}, `Failed to copy the requested template location from "${target}" to "${dest}"`);
-				reject(`Failed to add the template "${name}" (${target})`);
+				log.debug(`Failed to copy the requested template location from "${target}" to "${dest}"`, err);
+				log.warn(`Failed to add the template "${name}" (${target})`);
+				return false;
 			}
 		}
-	} else reject(`The requested template "${target}" does not exist and cannot be added`)
+	} else {
+		log.warn(`The requested template "${target}" does not exist and cannot be added`);
+		return false;
+	}
 }
 
-function remove (opts) {
+function remove ({opts, env, log}) {
 
-	log.level(opts.logLevel || 'warn');
 	log.debug(`Attempting to remove template "${opts.target}"`);
 	
-	if (opts.scriptSafe) return noScriptSafe();
-	if (!opts.target)    return Promise.reject(`Cannot remove a template without a "target"`);
+	if (!checkUser(opts)) return false;
+	if (!opts.target) {
+		log.warn(`Cannot remove a template without a "target"`);
+		return false;
+	}
 	
 	let   target     = opts.target
-		, templates  = getTemplates(opts)
+		, templates  = getTemplates(env)
 		, entry      = templates[target]
-		, defaultTpl = getDefaultTemplate(opts)
+		, defaultTpl = getDefaultTemplate(env)
 		, stat       = entry && fsync.stat(entry.path)
 		, err;
 
@@ -95,8 +111,9 @@ function remove (opts) {
 			else                    err = fsync.unlink(entry.path);
 		
 			if (err) {
-				log.debug({error: err.toString()}, `Failed to remove the requested template "${target}"`);
-				return Promise.reject(`Failed to remove the requested template "${target}"`);
+				log.debug(`Failed to remove the requested template "${target}"`, err);
+				log.warn(`Failed to remove the requested template "${target}"`);
+				return false;
 			}
 
 			log.debug(`Successfully removed the requested template "${target}"`);
@@ -105,10 +122,11 @@ function remove (opts) {
 	
 	if (defaultTpl && defaultTpl == target) {
 		log.debug(`Removing the default template value since it was set to the currently removed template "${target}"`);
-		return setDefault({env: opts.env, target: ''});
+		opts.target = '';
+		return setDefault({opts, log, env});
 	}
 	
-	return Promise.resolve();
+	return true;
 }
 
 function tmp () {
@@ -117,17 +135,16 @@ function tmp () {
 	return h.digest('hex').slice(0,16);
 }
 
-function install (opts) {
+function install ({opts, env, log}) {
 
 
 
 }
 
-function list (opts) {
+function list ({opts, env, log}) {
 
-	log.level(opts.logLevel || 'warn');
 	// this is the lone operation that does not require no-script-safe
-	let {list: res, max} = getTemplatesList(opts);
+	let {list: res, max} = getTemplatesList(env);
 	
 	log.debug(`Listing ${res.length} known templates`);
 
@@ -135,42 +152,44 @@ function list (opts) {
 	stdout(res.map(t => {
 		return `${spaces(4)}${t.name + (t.default ? '*' : '')}${spaces(max - t.name.length + 4 - (t.default ? 1 : 0))}${t.user ? 'local ' : 'system'}${spaces(4)}${t.data.library ? 'library' : 'app'}`;
 	}).join('\n').gray + '\n');
-	return Promise.resolve();
+	return true;
 }
 
-function setDefault (opts) {
+function setDefault ({opts, env, log}) {
 
-	log.level(opts.logLevel || 'warn');
-	if (opts.scriptSafe) return noScriptSafe();
+	if (!checkUser(opts)) return false;
 
 	let   target    = opts.target || ''
-		, templates = getTemplates(opts)
-		, curr      = getDefaultTemplate(opts) || '';
+		, templates = getTemplates(env)
+		, curr      = getDefaultTemplate(env) || '';
 
 	if      (!target) log.debug(`Removing the default template configuration value`);
 	else if (!templates[target]) {
 		// log.warn(`Cannot set the default template, "${target}" is not a known template`);
-		return Promise.reject(`Could not set the default template value to "${target}" because it is not a known template`);
+		log.warn(`Could not set the default template value to "${target}" because it is not a known template`);
+		return false;
 	}
 	else if (curr && curr == target) {
 		log.debug(`No update necessary, the default is already "${curr}" (${target})`);
-		return Promise.resolve();
+		return true;
 	}
 	else log.debug(`Attempting to set the default template to "${target}" from "${curr}"`);
 
-	return config({target: 'defaultTemplate', value: target, global: true, array: false, env: opts.env}).then(() => {
-		log.debug(`Successfully set the default template to "${target}" from "${curr}"`);
-	}, (e) => {
-		log.debug(e, `Failed to set the default template value to "${target}" from "${curr}"`);
-		return Promise.reject(`Could not update the default template value to "${target}"`);
-	});
+	let err = env.user.setConfig('defaultTemplate', target);
+	if (err) {
+		log.debug(`Failed to set the default template to "${target}" from "${curr}"`, err);
+		log.warn(`Could not update the default template`);
+		return false;
+	}
+	log.debug(`Successfully set the default template to "${target}" from "${curr}"`);
+	return true;
 }
 
 function getTemplates (env) {
 
 	let   ret = {}
-		, usr = opts.env.user.templates
-		, sys = opts.env.system.templates;
+		, usr = env.user.templates
+		, sys = env.system.templates;
 
 	if (usr) Object.keys(usr).forEach(name => ret[name] = usr[name]);
 	Object.keys(sys).forEach(name => ret[name] = sys[name]);
@@ -183,11 +202,10 @@ function getDefaultTemplate (env) {
 	return env.user && env.user.config && env.user.config.defaultTemplate;
 }
 
-function getTemplatesList (opts) {
+function getTemplatesList (env) {
 	let   list = []
 		, len  = 0
-		, dtpl = getDefaultTemplate(opts) || ''
-		, env  = opts.env;
+		, dtpl = getDefaultTemplate(env) || '';
 
 	if (env.user && env.user.templates) {
 		Object.keys(env.user.templates).forEach(t => {

@@ -84,7 +84,7 @@ function getUserEnv ({log}) {
 		templates: getUserTemplates({log})
 	};
 	
-	defineProperty(usr, 'set', {value: updateUserConfig.bind(usr, log), enumerable: true});
+	defineProperty(usr, 'setConfig', {value: updateUserConfig.bind(usr, log), enumerable: true});
 	
 	return usr;
 }

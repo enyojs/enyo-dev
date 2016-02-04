@@ -132,7 +132,13 @@ function initTemplate ({project, template, opts, env, log}) {
 
 function initLibraries ({project, template, opts, env, log}) {
 	
-	let libs = env.local.config && env.local.config.libraries;
+	let   libs      = env.local.config && env.local.config.libraries
+		, isLibrary = env.local.config && env.local.config.library;
+	
+	if (isLibrary) {
+		log.debug(`Will not initialize libraries for library "${project}"`);
+		return Promise.resolve();
+	}
 	
 	if (!libs || libs.length === 0) {
 		log.debug(`No libraries to initialize for "${project}"`);

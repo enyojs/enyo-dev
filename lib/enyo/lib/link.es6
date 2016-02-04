@@ -42,10 +42,10 @@ function printLinkable ({opts, env}) {
 }
 
 function printLocal ({opts, env}) {
-	let links, max;
+	let links, max, valid;
 	if (!checkUser(opts)) return false;
-	({links,max} = getLocal({opts, env}));
-	print(links, 'Local Links', max);
+	({links,max,valid} = getLocal({opts, env}));
+	if (valid) print(links, 'Local Links', max);
 }
 
 function print (links, header, max) {
@@ -66,20 +66,28 @@ function getLocal ({opts, env}) {
 	let   log    = getLog(opts)
 		, target = (opts.target && path.resolve(opts.target)) || env.cwd
 		, libDir
-		, lenv;
+		, lenv
+		, res;
 
 	if (target && target != env.cwd) {
 		lenv = getEnv({cwd: target}, false);
 	} else lenv = env;
 
 	if (!lenv.local.isProject) {
-		log.warn(`Cannot show local links, ${target || env.cwd} is not a project`);
-		return false;
+		log.warn(`Cannot read local links, ${target || env.cwd} is not a project`);
+		return {valid: false};
+	}
+	
+	if (lenv.local.config && lenv.local.config.library) {
+		log.warn(`Cannot read local links, ${target || env.cwd} is a library`);
+		return {valid: false};
 	}
 	
 	libDir = path.join(target || lenv.cwd, lenv.getConfig('libDir'));
 	
-	return getLinks({opts, target: libDir});
+	res = getLinks({opts, target: libDir});
+	res.valid = true;
+	return res;
 }
 
 function getLinks ({opts, target}) {
@@ -146,8 +154,10 @@ function linkLocal ({opts, env}) {
 			failed = true;
 			return;
 		}
-		if (!makeLink({opts, from: entry.path, to: path.join(libDir, entry.name), force})) {
-			log.warn(`Failed to create link for "${l}"`);
+		// to make this link to the real path use entry.path, but the original idea is the double link
+		// so it can be swapped without needing to relink all projects
+		if (!makeLink({opts, from: entry.linkPath, to: path.join(libDir, entry.name), force})) {
+			log.debug(`Failed to create link for "${l}"`);
 			failed = true;
 		}
 	});
