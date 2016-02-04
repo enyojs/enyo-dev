@@ -1,8 +1,6 @@
 {
   "library": true,
-  "name": "",
   "paths": [],
-  "logLevel": "warn",
   "production": false,
   "devMode": true,
   "cache": true,

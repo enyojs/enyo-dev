@@ -1,12 +1,10 @@
 {
   "title": "",
-  "name": "",
   "libDir": "lib",
   "paths": [],
   "libraries": [],
   "sources": {},
   "targets": {},
-  "logLevel": "warn",
   "production": false,
   "devMode": true,
   "cache": true,
