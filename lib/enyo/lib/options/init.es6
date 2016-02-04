@@ -1,8 +1,9 @@
 'use strict';
 
-import path from 'path';
-import init from '../init';
-import env  from '../env';
+import path                from 'path';
+import init                from '../init';
+import env                 from '../env';
+import {default as logger} from '../../../logger';
 
 export default {
 	name: 'init',
@@ -27,12 +28,6 @@ export default {
 			flag: true,
 			help: 'Set this flag when initializing a library project. This is assumed if the requested "template" is a library. If ' +
 				'this flag is set and the requested template is not a library it will ignore the flag.'
-		},
-		logLevel: {
-			full: 'log-level',
-			abbr: 'l',
-			help: 'Typically only used for debugging purposes. Available options are ' + 
-				'[fatal, error, warn, info, debug, trace]. Defaults to "warn".'
 		},
 		initLibs: {
 			full: 'init-libs',
@@ -59,9 +54,13 @@ export default {
 				'flag is set to false this has no meaning. This option will be ignored if the "link-all-libs" flag is set.'
 		}
 	},
-	callback: function (opts) {
+	callback (opts) {
+		let log = logger.child({component: 'init'});
+		log.level(opts.logLevel || 'warn');
 		opts.project = path.resolve(opts.project || process.cwd());
 		opts.cwd     = opts.project;
-		env(opts).then(init);
+		init({opts, env: env(opts)}).catch(e => {
+			log.warn(e);
+		});
 	}
 };

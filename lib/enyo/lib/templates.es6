@@ -5,76 +5,72 @@ import path                       from 'path';
 import {default as logger,stdout} from '../../logger';
 import {default as Promise}       from 'bluebird';
 import {fsync,spaces}             from '../../util-extra';
-import config                     from './config';
 import crypto                     from 'crypto';
 
-const log = logger.child({command: 'templates'});
+let   LOG    = logger.child({component: 'templates'})
+	, didSet = false;
+
+function getLog (opts) {
+	if (!didSet) {
+		LOG.level(opts.logLevel || 'warn');
+		didSet = true;
+	}
+	return LOG;
+}
 
 /*
 Manage templates. Returns a promise.
 */
-export default function templates (opts) {
+export default function templates ({opts, env}) {
 
-	// this command cannot be run in scriptSafe mode
-	if (opts.scriptSafe) return noScriptSafe();
-	log.level(opts.logLevel || 'warn');
+	let log = getLog(opts);
 
-	if      (opts.action == 'add')     return add(opts);
-	else if (opts.action == 'remove')  return remove(opts);
-	else if (opts.action == 'list')    return list(opts);
-	else if (opts.action == 'install') return install(opts);
-	else if (opts.action == 'default') return setDefault(opts);
+	if (opts.user === false) return needUser(log);
+
+	if      (opts.action == 'add')     return add({opts, env, log});
+	else if (opts.action == 'remove')  return remove({opts, env, log});
+	else if (opts.action == 'list')    return list({opts, env, log});
+	else if (opts.action == 'install') return install({opts, env, log});
+	else if (opts.action == 'default') return setDefault({opts, env, log});
 	else {
-		log.debug('Command executed with no or unknown "action" value');
-		return Promise.reject('Command "templates" must have an action and it must be one of "add", "remove", "list", "install" or "default"');
+		log.warn(`Cannot complete${opts.action ? (' unknown action "' + opts.action + '"') : ' no action provided'}`);
 	}
 }
 
-
-function noScriptSafe () {
-	log.debug('Attempt to execute command in script-safe mode');
-	return Promise.reject('Commands related to templates cannot be executed in script-safe mode');
+function needUser (log) {
+	log.warn('Template actions require user-mode to be active');
 }
 
+function add ({opts, env, log}) {
 
-
-function add (opts) {
-
-	log.level(opts.logLevel || 'warn');
-	log.debug(`Attempting to add template from "${opts.target || opts.env.cwd}"`);
+	log.debug(`Attempting to add template from "${opts.target || env.cwd}"`);
 	
-	if (opts.scriptSafe) return noScriptSafe();
-	if (!opts.target)    log.debug(`Using the current working directory as the target to add since no "target" was provided (${opts.env.cwd})`);
+	if (!opts.target) log.debug(`Using the current working directory as the target to add since no "target" was provided (${env.cwd})`);
 	
+	let   target    = path.resolve(opts.target || env.cwd)
+		, templates = getTemplates(env);
+
+	if (fsync.exists(target)) {
+		let   {result: config} = fsync.readJson(path.join(target, '.enyoconfig'))
+			, {result: pkg}    = fsync.readJson(path.join(target, 'package.json'))
+			, name             = (pkg && pkg.name) || (config && config.name) || path.basename(target);
 	
-	let   target    = path.resolve(opts.target || opts.env.cwd)
-		, templates = getTemplates(opts);
-
-	return new Promise((resolve, reject) => {
-
-		if (fsync.exists(target)) {
-			let   {result: config} = fsync.readJson(path.join(target, '.enyoconfig'))
-				, {result: pkg}    = fsync.readJson(path.join(target, 'package.json'))
-				, name             = (pkg && pkg.name) || (config && config.name) || path.basename(target);
-		
-			log.debug(`Determined template "${target}" does exist and the name of the template is "${name}"`);
-		
-			if (templates[name]) {
-				reject(`A template by the name "${name}" is already registered on the system and cannot be added again`);
+		log.debug(`Determined template "${target}" does exist and the name of the template is "${name}"`);
+	
+		if (templates[name]) {
+			reject(`A template by the name "${name}" is already registered on the system and cannot be added again`);
+		} else {
+			let   dest = path.join(opts.env.userTemplates, tmp())
+				, err  = fsync.link(target, dest);
+			if (!err) {
+				log.debug(`Successfully linked the requested template from "${target}" to "${dest}"`);
+				resolve();
 			} else {
-				let   dest = path.join(opts.env.userTemplates, tmp())
-					, err  = fsync.link(target, dest);
-				if (!err) {
-					log.debug(`Successfully linked the requested template from "${target}" to "${dest}"`);
-					resolve();
-				} else {
-					log.debug({error: err.toString()}, `Failed to copy the requested template location from "${target}" to "${dest}"`);
-					reject(`Failed to add the template "${name}" (${target})`);
-				}
+				log.debug({error: err.toString()}, `Failed to copy the requested template location from "${target}" to "${dest}"`);
+				reject(`Failed to add the template "${name}" (${target})`);
 			}
-		} else reject(`The requested template "${target}" does not exist and cannot be added`)
-
-	});
+		}
+	} else reject(`The requested template "${target}" does not exist and cannot be added`)
 }
 
 function remove (opts) {
@@ -170,7 +166,7 @@ function setDefault (opts) {
 	});
 }
 
-function getTemplates (opts) {
+function getTemplates (env) {
 
 	let   ret = {}
 		, usr = opts.env.user.templates
@@ -182,9 +178,9 @@ function getTemplates (opts) {
 	return ret;
 }
 
-function getDefaultTemplate (opts) {
+function getDefaultTemplate (env) {
 	// this may return falsy which is ok and expected
-	return opts.env.user && opts.env.user.json && opts.env.user.json.defaultTemplate;
+	return env.user && env.user.config && env.user.config.defaultTemplate;
 }
 
 function getTemplatesList (opts) {
@@ -220,4 +216,4 @@ function getTemplatesList (opts) {
 	return {list, max: len};
 }
 
-export {add,remove,install,list,setDefault,getTemplates,getDefaultTemplate};
+export {getTemplates,getDefaultTemplate};

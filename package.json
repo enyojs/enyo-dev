@@ -5,10 +5,6 @@
   "main": "index.js",
   "repository": "https://github.com/enyojs/enyo-dev",
   "bin": {
-    "enyo-pack": "./bin/enyo-pack.js",
-    "epack": "./bin/enyo-pack.js",
-    "enyo-gen": "./bin/enyo-gen.js",
-    "egen": "./bin/enyo-gen.js",
     "enyo": "./bin/enyo.js"
   },
   "scripts": {
