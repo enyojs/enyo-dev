@@ -6,17 +6,16 @@ require('babel-register')({
 	extensions: ['.es6']
 });
 
-var
-	nom = require('nomnom'),
-	options = require('../lib/enyo/options'),
-	commands = require('../lib/enyo/commands'),
-	subargs = require('../lib/utils').subargs;
+var   nom     = require('nomnom')
+	, options = require('../lib/enyo/options').default
+	, comms   = require('../lib/enyo/commands').default
+	, subargs = require('../lib/utils').subargs;
 
 nom
 	.script('enyo')
 	.options(options);
 
-commands.forEach(function (command) {
+comms.forEach(function (command) {
 	nom
 		.command(command.name)
 		.options(command.options)

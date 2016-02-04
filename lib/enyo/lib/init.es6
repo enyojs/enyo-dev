@@ -126,7 +126,9 @@ function initTemplate ({project, template, opts, env, log}) {
 		}
 	}
 
-	if (data.config && data.config.name != name) {
+	// for backward compatibility we will attempt to keep this the same as the package.json but we really
+	// only want to have to deal with the name property in one of those two files
+	if (data.config && data.config.hasOwnProperty('name') && data.config.name != name) {
 		// we only want to update this file if it already exists
 		log.debug(`Updating the .enyoconfig file "name" to "${name}" from "${data.config.name}"`);
 		data.config.name = name;
