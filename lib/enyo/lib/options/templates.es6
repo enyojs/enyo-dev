@@ -2,13 +2,10 @@
 
 import env       from '../env';
 import templates from '../templates';
-import {default as logger} from '../../../logger';
-
-const log = logger.child({command: 'templates'});
 
 export default {
 	name: 'templates',
-	help: 'List, add, remove and change the default templates for the current user. This command cannot be used in script-safe mode.',
+	help: 'List, add, remove and change the default templates for the current user. This command cannot be used in non-user mode.',
 	options: {
 		target: {
 			position: 2,
@@ -34,8 +31,6 @@ export default {
 		}
 	},
 	callback (opts) {
-		env(opts).then(templates).catch(e => {
-			log.warn(e);
-		});
+		templates({opts, env: env(opts)});
 	}
 };
