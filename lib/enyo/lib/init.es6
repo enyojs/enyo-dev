@@ -22,13 +22,25 @@ export default function init ({opts, env}) {
 	let   project   = opts.project && path.normalize(opts.project)
 		, template  = opts.template
 		, isLibrary = !! opts.library
+		, templates = getTemplates(env)
 		, log       = logger.child({component: 'init'})
 		, libs;
 
 	// set a default log level appropriate the any requested from the cli
 	log.level(opts.logLevel || 'warn');
 
-	if (!template) template = isLibrary ? 'default-library' : getDefaultTemplate(env) || (isLibrary ? 'default-library' : 'default-app');
+	// if (!template) template = isLibrary ? 'default-library' : getDefaultTemplate(env) || (isLibrary ? 'default-library' : 'default-app');
+	if (!template) {
+		let   dname = getDefaultTemplate(env)
+			, dtmp  = templates[dname];
+		if (!dtmp) {
+			if (isLibrary) template = 'default-library';
+			else           template = 'default-app';
+		} else {
+			if (isLibrary && (dtmp.config && !dtmp.config.library)) template = 'default-library';
+			else                                                    template = dname;
+		}
+	}
 
 	// attempt to ensure the requested directory
 	if (!ensureProject({project, log})) return Promise.reject('Could not ensure the requested project path');
@@ -175,7 +187,7 @@ function initLibraries ({project, template, opts, env, log}) {
 
 			if (libs.length > 0) {
 				log.debug(`Could not link ${libs.join(',')}`);
-				return reject(`Failed to link the libraries ${libs.join(', ')}`);
+				return reject(`Failed to link the ${libs.length > 1 ? 'libraries' : 'library'} ${libs.join(', ')}`);
 			} else {
 				stdout('All libraries were able to be linked');
 				return resolve();
