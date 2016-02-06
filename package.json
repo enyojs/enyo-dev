@@ -1,6 +1,6 @@
 {
   "name": "enyo-dev",
-  "version": "0.5.2",
+  "version": "1.0.0",
   "description": "Packaging and developer management tools for Enyo 2.x",
   "main": "index.js",
   "repository": "https://github.com/enyojs/enyo-dev",
@@ -62,10 +62,5 @@
     "through2": "^2.0.0",
     "uglify-js": "^2.4.17",
     "winston": "^2.1.1"
-  },
-  "devDependencies": {
-    "chai": "^3.2.0",
-    "chai-as-promised": "^5.1.0",
-    "mocha": "^2.2.5"
   }
 }

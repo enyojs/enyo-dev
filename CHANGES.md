@@ -2,16 +2,32 @@
 
 > For installation and upgrade instructions, see [the installation and upgrade guide in the documentation](README.md#setup-install). See [here for requirements](README.md#setup-reqs).
 
-## Overivew (0.5.3)
+## Overview (1.0.0)
+
+* The commands `enyo serve`, `enyo config` and `enyo find-links` and all related aliases have been removed
+* The commands `enyo init`, `enyo link` and `enyo unlink` have been rewritten to accommodate the "templates" feature being added, please review the command-line options for more information and to see what new flags have been added and which have been modified or removed from previous releases
+* Added the command `enyo templates` and the notion of `enyo init` using raw templates for new projects
+	* The "templates" feature removes previous notions of a global "defaults" configuration file that was used during new project initialization
+* The following configuration properties have been removed as configurable with the `.enyoconfig` project file: `links`, `linkAllLibs` and `logLevel`
+	* The `links` option has been removed entirely, these are not specified only at the time the `enyo init` command is executed or manually using the `enyo link` command separately
+	* The `linkAllLibs` option is still available for `enyo init`
+	* The `logLevel` option is now available on all commands
+* The `--interactive` and the configurable `interactive` JSON option have been removed
+* The `--scriptSafe` and the configurable `scriptSafe` JSON option have been removed
+	* The equivalent can be achieved only with a runtime flag for all commands `--no-user`
+* The `--config-file` option has been removed (it never really worked and is incompatible with architectural decisions)
+* When initializing a project now, if using one of the built-in _bare_ templates, it will not include any library dependencies
+* The `epack`, `egen` and `enyo-pack` aliases have been removed
+* You can only make libraries linkable system-wide, previously you could also make apps linkable
+* The logging output now pre-formats the output to be human readable without piping to the external _bunyan_ process
+
+## Previous (0.5.3) [NOT RELEASED]
 
 * Fixed a bug for the `enyo find-links` command that would not allow an absolute path to be passed in from the command line
 * Added correct implementation for `enyo config -r libraries [library]` to automatically remove the `sources` and `targets` entry for the named libraries as was previously documented
 * Fixed issue where single-file projects would not build properly
 * Fixed issue where using `enyo pack` could potentially create a target directory if it didn't already exist
 * When packaging libraries using the `--style-only` flag you can now use the `--css-outfile` flag to designate the filename
-* The command `enyo serve` and all related aliases have been removed
-* The `enyo init` command has been rewritten to accommodate the "templates" feature being added, please review the command-line options for more information and to see what new flags have been added and which have been modified or dropped from the previous release
-* Add the "templates" feature and related command-line sub-command, please review the command-line options for more information
 
 ## Previous (0.5.1)
 
