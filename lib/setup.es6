@@ -12,6 +12,7 @@ import findLastIndex             from 'find-index/last';
 import getEnv                    from './enyo/lib/env';
 import {fsync}                   from './util-extra';
 import {default as logger,fatal} from './logger';
+import {readCache}               from './Packager/lib/cache-manager';
 
 let log = logger.child({component: 'setup'});
 
@@ -77,9 +78,12 @@ function configure ({opts, env, log}) {
 	// because the packager and watcher want the cache to be an object...
 	if (opts.cache === true && !opts.resetCache) {
 		// @TODO: Needs to validate the cache but the function was async and needs to be converted...
-		let {result: cache, error} = fsync.readJson(opts.cacheFile);
-		if (!error) opts.cache = Array.isArray(cache) && cache.length ? cache : true;
-		else log.trace(`Failed to read cache file "${opts.cacheFile}"`, error);
+		let result = readCache(opts.cacheFile);
+		if (result && result instanceof Error) {
+			log.trace(`Failed to read or validate the cache file "${opts.cacheFile}"`, result);
+		} else {
+			opts.cache = result;
+		}
 	}
 	
 	log.trace(`Setup (property normalization) complete`, opts);

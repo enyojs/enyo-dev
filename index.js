@@ -12,10 +12,10 @@ var   Packager = require('./lib/Packager')
 exports.packager = function packager (opts) {
 	opts = opts || {};
 	let params = setup(opts);
-	return opts.watch ? (new Watcher(params)) : (new Packager(params));
+	return opts.watch ? (new Watcher(params)) : ((new Packager(params)).run());
 };
 
-exports.watch   = function watch (opts) {
-	opts = opts || {};
-	return new Watcher(setup(opts));
-};
+// exports.watch   = function watch (opts) {
+// 	opts = opts || {};
+// 	return new Watcher(setup(opts));
+// };
