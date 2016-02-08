@@ -144,6 +144,13 @@ function linkLocal ({opts, env}) {
 		return false;
 	}
 	
+	let err = fsync.ensureDir(libDir);
+	if (err) {
+		log.trace(`Failed to ensure libDir "${libDir}"`, err);
+		log.warn(`Unable to ensure the target library directory is available "${libDir}"`);
+		return false;
+	}
+	
 	target = typeof target == 'string' ? (target.split(',').map(l => l.trim())) : target;
 	
 	({links} = getLinkable({opts, env}));
