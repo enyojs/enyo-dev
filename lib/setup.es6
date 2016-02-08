@@ -86,7 +86,7 @@ function configure ({opts, env, log}) {
 		}
 	}
 	
-	log.trace(`Setup (property normalization) complete`, opts);
+	log.trace(`Setup (property normalization) complete`);
 	return {opts, env};
 }
 

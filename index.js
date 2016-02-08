@@ -5,7 +5,7 @@ require('babel-register')({
 });
 
 var   Packager = require('./lib/Packager')
-	// , Watcher  = require('./lib/Watcher')
+	, Watcher  = require('./lib/Watcher')
 	, setup    = require('./lib/setup').default
 	, exports  = module.exports;
 
@@ -15,7 +15,7 @@ exports.packager = function packager (opts) {
 	return opts.watch ? (new Watcher(params)) : ((new Packager(params)).run());
 };
 
-// exports.watch   = function watch (opts) {
-// 	opts = opts || {};
-// 	return new Watcher(setup(opts));
-// };
+exports.watch   = function watch (opts) {
+	opts = opts || {};
+	return new Watcher(setup(opts));
+};
