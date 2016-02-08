@@ -4,26 +4,18 @@ require('babel-register')({
 	extensions: ['.es6']
 });
 
-var
-	Packager = require('./lib/Packager'),
-	Watcher = require('./lib/Watcher');
+var   Packager = require('./lib/Packager')
+	// , Watcher  = require('./lib/Watcher')
+	, setup    = require('./lib/setup').default
+	, exports  = module.exports;
 
-var
-	setup = require('./lib/setup');
-
-exports.package = function (opts) {
+exports.packager = function packager (opts) {
 	opts = opts || {};
-	return setup(opts).then(function () {
-		return opts.env.get('watch');
-	}).then(function (watch) {
-		if (watch) return exports.watch(opts);
-		else return new Packager(opts).run();
-	});
+	let params = setup(opts);
+	return opts.watch ? (new Watcher(params)) : (new Packager(params));
 };
 
-exports.watch = function (opts) {
+exports.watch   = function watch (opts) {
 	opts = opts || {};
-	return setup(opts).then(function () {
-		return new Watcher(opts);
-	});
+	return new Watcher(setup(opts));
 };

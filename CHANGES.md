@@ -17,9 +17,14 @@
 	* The equivalent can be achieved only with a runtime flag for all commands `--no-user`
 * The `--config-file` option has been removed (it never really worked and is incompatible with architectural decisions)
 * When initializing a project now, if using one of the built-in _bare_ templates, it will not include any library dependencies
-* The `epack`, `egen` and `enyo-pack` aliases have been removed
+* The `epack`, `egen`, `enyo-gen` and `enyo-pack` aliases have been removed
 * You can only make libraries linkable system-wide, previously you could also make apps linkable
 * The logging output now pre-formats the output to be human readable without piping to the external _bunyan_ process
+* Removed the `enyo pack` options `cache-file` and `list-only`
+* The unfinished `analytics` option was removed from `enyo pack`
+* The `enyo pack` option `outdir` is now `outDir`
+* The `enyo pack` option `outfile` is now `outFile`
+* The exported function `package` from _index.js_ is now `packager` to avoid using reserved word in strict mode
 
 ## Previous (0.5.3) [NOT RELEASED]
 
