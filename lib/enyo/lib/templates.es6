@@ -1,10 +1,12 @@
 'use strict';
 
-import colors                     from 'colors';
-import path                       from 'path';
-import {default as logger,stdout} from '../../logger';
-import {fsync,spaces}             from '../../util-extra';
-import crypto                     from 'crypto';
+import colors                              from 'colors';
+import path                                from 'path';
+import {default as logger,stdout}          from '../../logger';
+import {fsync,spaces,isGitUri,parseGitUri} from '../../util-extra';
+import crypto                              from 'crypto';
+import git                                 from './git';
+import {default as setup}                  from './env';
 
 let   LOG    = logger.child({component: 'templates'})
 	, didSet = false;
@@ -137,8 +139,45 @@ function tmp () {
 
 function install ({opts, env, log}) {
 
+	if (!checkUser(opts)) return false;
 
+	let   target    = opts.target
+		, action    = opts.action
+		, isuri     = isGitUri(target)
+		, parts     = isuri ? parseGitUri(target) : null
+		, templates = getTemplates(env)
+		, dest;
 
+	log.debug(parts, `Attempting to install a template from a git uri "${target}"`);
+
+	if (!isuri) {
+		log.warn(`The requested install target "${target}" is not a valid URI`);
+		return false;
+	}
+	
+	dest = path.join(env.TEMPLATES, tmp());
+	
+	return git({source: parts.uri, target: parts.target, destination: dest, library: parts.name}).then(() => {
+		// check to see if it is valid
+		let   lenv = setup({cwd: dest, user: false}, false)
+			, name = (lenv.local.package && lenv.local.package.name) || (lenv.local.config && lenv.local.config.name);
+		if (!lenv.local.isProject || !name) {
+			log.warn(`The requested uri "${parts.uri}" is not a valid template, cleaning up`);
+			let err = fsync.removeDir(dest);
+			if (err) {
+				log.debug(`Failed to removed directory "${dest}" after failed attempt to install template, will need to remove manually`, err);
+				log.warn(`Could not cleanup after installation of bad template, will need to cleanup manually "${dest}"`);
+			} else log.debug(`Cleanup complete "${dest}"`);
+			return false;
+		} else {
+			if (templates[name]) {
+				log.warn(`There is already a template installed by the name "${name}", you will need remove one of them`);
+			} else log.debug(`Successfully installed the git repository as a template "${name}"`);
+		}
+	}).catch(e => {
+		log.debug(`Failed to install the requested uri "${parts.uri}"`, e);
+		log.warn(`Failed to install the requested uri "${parts.uri}"`);
+	});
 }
 
 function list ({opts, env, log}) {
