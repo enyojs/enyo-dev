@@ -1,38 +1,50 @@
+#!/usr/bin/env node
+
 'use strict';
-//
-// var
-// 	Promise = require('bluebird');
-//
-// var
-// 	env = require('../lib/enyo/lib/env');
-//
-// env({scriptSafe: true}).then(function (opts) {
-// 	// try to update user-defaults if the new additions have been made
-// 	return Promise.resolve().then(function () {
-// 		var changed = false;
-// 		if (opts.env.user.hadConfig) {
-// 			Object.keys(opts.env.system.config).forEach(function (key) {
-// 				if (!opts.env.user.json.hasOwnProperty(key)) {
-// 					changed = true;
-// 					opts.env.user.json[key] = opts.env.system.config[key];
-// 				}
-// 			});
-// 			if (changed) {
-// 				return opts.env.user.commit();
-// 			}
-// 		}
-// 	}).then(function () {
-// 		var changed = false;
-// 		if (opts.env.user.hadDefaults) {
-// 			Object.keys(opts.env.system.defaults).forEach(function (key) {
-// 				if (!opts.env.user.defaults.hasOwnProperty(key)) {
-// 					changed = true;
-// 					opts.env.user.defaults[key] = opts.env.system.defaults[key];
-// 				}
-// 			});
-// 			if (changed) {
-// 				return opts.env.user.commit(true);
-// 			}
-// 		}
-// 	});
-// });
+
+require('babel-register')({
+	extensions: ['.es6']
+});
+
+var   osenv    = require('osenv')
+	, path     = require('path')
+	, fsync    = require('../lib/util-extra').fsync;
+
+var   home     = osenv.home()
+	, enyo     = path.join(home, '.enyo')
+	, projects = path.join(enyo, 'projects')
+	, defaults = path.join(enyo, 'defaults')
+	, config   = path.join(enyo, 'config')
+	, knowns   = fsync.readJson(path.join(__dirname, '..', 'lib', 'enyo', 'config'));
+
+// believe the key changes here are that the projects feature has gone
+// away so we remove it whether it was old-school "file" type or directory
+// because removing it is safe for backward compatibility regardless
+var stat
+stat = fsync.stat(projects);
+if (stat) {
+	if      (stat.isFile())         fsync.removeFile(projects);
+	else if (stat.isDirectory())    fsync.removeDir(projects);
+	// definitely don't know why this would be a link but...
+	else if (stat.isSymbolicLink()) fsync.unlink(projects);
+}
+stat = fsync.stat(defaults);
+if (stat) {
+	if (stat.isFile()) fsync.removeFile(defaults);
+}
+stat = fsync.stat(config);
+if (stat) {
+	if (stat.isFile()) {
+		var json = fsync.readJson(config).result;
+		if (json) {
+			var ch = false;
+			Object.keys(json).forEach(function (key) {
+				if (!knowns.hasOwnProperty(key)) {
+					ch = true;
+					delete json[key];
+				}
+			});
+			if (ch) fsync.writeJson(config, json);
+		}
+	}
+}
