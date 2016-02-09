@@ -9,7 +9,7 @@
 * Added the command `enyo templates` and the notion of `enyo init` using raw templates for new projects
 	* The "templates" feature removes previous notions of a global "defaults" configuration file that was used during new project initialization
 * The following configuration properties have been removed as configurable with the `.enyoconfig` project file: `links`, `linkAllLibs` and `logLevel`
-	* The `links` option has been removed entirely, these are not specified only at the time the `enyo init` command is executed or manually using the `enyo link` command separately
+	* The `links` option has been removed entirely, the `enyo link` command must be used separately
 	* The `linkAllLibs` option is still available for `enyo init`
 	* The `logLevel` option is now available on all commands
 * The `--interactive` and the configurable `interactive` JSON option have been removed
