@@ -63,11 +63,12 @@ function RESOLVE_PATH (target, cwd, log, cache, opts) {
 		if (result === FAIL || result === INVALID) {
 			if (fullpath > cwd) {
 				let   base = path.dirname(fullpath)
-					, exp  = EXPAND(base, log, cache, opts);
+					, exp  = EXPAND(base, log, cache, opts, cwd);
 				if (exp !== INVALID && exp !== FAIL) {
 					fullpath = path.join(exp, path.basename(fullpath));
 					log.trace({function: 'RESOLVE_PATH'}, `Using expanded path "${fullpath}" to search for package`);
-					result = RESOLVE_PACKAGE(fullpath, log, cache, opts);
+					result = RESOLVE_FILE(fullpath, log, cache, opts);
+					if (result === FAIL || result === INVALID) result = RESOLVE_PACKAGE(fullpath, log, cache, opts);
 				}
 			}
 		}
@@ -336,15 +337,17 @@ function RESOLVE_DIRECTORY (target, log, cache, opts) {
 
 /*
 */
-function EXPAND (target, log, cache, opts) {
+function EXPAND (target, log, cache, opts, cwd) {
 
 	log.trace({function: 'EXPAND'}, `Expanding path "${target}"`);
 
-	let   root  = opts.package || opts.cwd || process.cwd()
+	let   root  = cwd || opts.package || opts.cwd || process.cwd()
 		, base  = path.relative(root, target)
 		, steps = base.split('/')
 		, step  = root
 		, result;
+		
+		log.trace({function: 'EXPAND', target, root, base, steps});
 
 	while (steps.length) {
 		let dir = steps.shift();
