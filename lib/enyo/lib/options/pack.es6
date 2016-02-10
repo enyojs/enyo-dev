@@ -77,7 +77,10 @@ export default {
 				'the configuration file are relative to the package location but paths interpreted from the ' +
 				'command-line should be relative to the current working directory (unless full). Also NOTE: ' +
 				'the packager will still search the value of the "libDir" of when any additional paths have been ' +
-				'exhausted.'
+				'exhausted.',
+			transform (paths) {
+				return paths ? paths.trim().split(',').map(p => p && p.trim()) : null;
+			}
 		},
 		externals: {
 			help: 'To build without bundled external libraries, use --no-externals; always false ' +
@@ -95,7 +98,10 @@ export default {
 		skip: {
 			full: 'skip',
 			help: 'A comma-separated list of external libraries that should not be included in the ' +
-				'output when not in --library mode.\n\n\t\tExample: --skip=enyo,moonstone\n'
+				'output when not in --library mode.\n\n\t\tExample: --skip=enyo,moonstone\n',
+			transform (libs) {
+				return libs ? libs.trim().split(',').map(l => l && l.trim()) : null;
+			}
 		},
 		library: {
 			full: 'library',

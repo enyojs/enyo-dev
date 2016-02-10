@@ -150,7 +150,7 @@ function defaults (name, env) {
 }
 
 function paths (opts, env) {
-	let   p = clipaths('paths', opts.paths, opts, env)
+	let   p = clipaths('paths', typeof opts.paths == 'string' ? opts.paths.split(',') : opts.paths, opts, env)
 		, l = path.resolve(opts.package, opts.libDir);
 	if (p.indexOf(l) === -1) p.push(l);
 	return p;
