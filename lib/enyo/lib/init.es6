@@ -107,8 +107,8 @@ function initTemplate ({project, template, opts, env, log}) {
 		return false;
 	}
 	
-	if      (stat.isDirectory())    err = fsync.copyDir(data.path, project, true);
-	else if (stat.isSymbolicLink()) err = fsync.copyLinkDir(data.path, project, true);
+	if      (stat.isDirectory())    err = fsync.copyDir(data.path, project);
+	else if (stat.isSymbolicLink()) err = fsync.copyLinkDir(data.path, project);
 
 	if (err) {
 		log.debug(`Failed to copy template "${template}" (${data.path}) to "${project}"`, err);
