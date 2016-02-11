@@ -303,11 +303,6 @@ export default {
 			flag: true,
 			default: false,
 			hidden: true
-		},
-		DEBUG_WRAPPER: {
-			flag: true,
-			default: false,
-			hidden: true
 		}
 	}
 };
