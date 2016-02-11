@@ -25,6 +25,11 @@
 * The `enyo pack` option `outdir` is now `outDir`
 * The `enyo pack` option `outfile` is now `outFile`
 * The exported function `package` from _index.js_ is now `packager` to avoid using reserved word in strict mode
+* Reworked "require" and "request" methods and they are no longer global, all of the wrapper functionality uses a "enyo" namespace object
+	* "require" is now "enyo.require"
+	* "request" is now "enyo.request"
+	* There is a new way to use "request.isRequest" as "enyo.isRequest" when the "request" object has been injected into the bundled code (because of the presence of a "request" call in the source during build)
+	* Bundled code is no longer directly exposed to the wrapper scope
 
 ## Previous (0.5.3) [NOT RELEASED]
 
