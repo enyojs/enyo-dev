@@ -30,6 +30,7 @@
 	* [templates](#commands-templates)
 	* [pack](#commands-pack)
 		* [Error handling/debugging](#commands-pack-errors)
+		* [Automatic rebuilding](#commands-pack-auto-rebuild)
 * [Asset Handling](#assets)
 	* [How to include assets](#assets-how-to-include-assets)
 	* [Referencing from style](#assets-referencing-from-style)
@@ -498,26 +499,23 @@ enyo templates install https://github.com/enyojs/moonstone-template.git
 ```bash
 Usage: enyo pack [package] [options]
 
-package     The relative path to the application directory to package. Defaults to the current working directory. Cannot be defined in configuration.
+package     The path to the package to bundle and prepare for deployment. This can be a relative or full path. If omitted the current working directory will be used.
 
 Options:
-   -c, --config-file                          Set this to a custom configuration file, otherwise defaults to .enyoconfig in the target working directory.
-   -i, --interactive                          Various commands may need user input. To avoid interactive sessions and always use the built-in resolution options set this to false.
-   --script-safe                              When executing commands within an automated script or without an active terminal set this flag to true.
+   --user                                     Set this to false when executing from an automated script or in an environment where a user-environment should not be used.  [true]
+   -l, --log-level                            Typically only used for debugging purposes. Available options are [fatal, error, warn, info, debug, trace]. Defaults to "warn".  [warn]
+   --log-json                                 Enable this flag to ensure the output of the logging is the normal bunayn "JSON" format to STDOUT that can be piped to their separate bunyan cli tool for filtering.  [false]
    -v, --version                              Display the current version of the tools and exit.
-   --name                                     In rare cases you may want to override the default name value found in the configuration file. In those cases, use this to provide the name of the output application. Note this is NOT the same as the output "title", see --title for more information. Also note that this value must be a valid unix filename.
-   -l, --log-level                            Typically only used for debugging purposes. The process pipes a JSON stream of output that can be piped through the bunyan utility to be human-readable. Available options [fatal, error, warn, info, debug, trace]. Defaults to "warn".
+   --name                                     In rare cases you may wish to override the current project's configured "name". If so set this value to modify the output "name". NOTE: this is not the same as the "title" of the HTML (if applicable) that is produced. See "--title" for more information. This value must be a valid POSIX filename.
    -P, --production                           Build in production mode; supersedes the --dev-mode and --no-dev-mode flags. Defaults to false.
    -D, --dev-mode                             Whether or not this build is a development build; negated if --production set. Defaults to true.
    --cache                                    Enables the use of a cache-file, if it exists and also the ability to write to the cache-file. This cache-file can significantly improve build times in some cases. To force a clean build but cache the results simply remove the cache-file. To disable use --no-cache. Defaults to true.
    -r, --reset-cache                          Allows you to ignore an existing cache-file but still write the cached output for subsequent runs. Defaults to false. The same as removing the current cache-file.
    --trust-cache                              Convenience flag only used during watch-mode, when set, will default to using the cached data without re-building the output. This should only be used when you are certain nothing has changed and it has no need to re-evaluate the input source or re-produce any of the output files. Defaults to false.
-   --cache-file                               Set this to a specific filename for the cache file. If it is not the default, then this will need to be set to the correct file name in subsequent runs to be found and used. Defaults to ".enyocache".
    --clean                                    This will empty the outdir before writing any new files to it. Helpful when switching build modes or when assets/styles have changed and old files may be lingering. Defaults to false.
    --source-maps                              Whether or not to build source-maps when in --dev-mode; disable with --no-source-maps. Defaults to true (only applies to --dev-mode).
-   --paths                                    A comma-separated list of paths relative to the current working directory to search for libraries and their modules. Specifying these from the command-line will override any found in the configuration or defaults. Note that if specified in the configuration file they are relative to the package, not the current working directory. Also note that the tools will still search the defined libDir when any provided paths have been exhausted.
-   --externals                                To build without bundled external libraries, use --no-externals; always false when in --library mode. NOTE that the library is still required to compile even if the output will not include it. Defaults to true.
-   --list-only                                Set this flag to have it output the dependency tree to stdout. Defaults to false. Cannot be defined in configuration.
+   --paths                                    A command separated list of paths to search for libraries and their modules. Specifying these from the command-line will override any found in the configuration files. NOTE: the paths in the configuration file are relative to the package location but paths interpreted from the command-line should be relative to the current working directory (unless full). Also NOTE: the packager will still search the value of the "libDir" of when any additional paths have been exhausted.
+   --externals                                To build without bundled external libraries, use --no-externals; always false when in --library mode. NOTE: the library is still required to compile even if the output will not include it. Defaults to true.
    --strict                                   By default, if a style-file or asset file is missing, or if an asset path cannot be properly translated, only a warning will be issued. If this is true then it will halt the compilation. Defaults to false.
    --skip                                     A comma-separated list of external libraries that should not be included in the output when not in --library mode.
 
@@ -526,8 +524,8 @@ Options:
    --library                                  Produce a library build instead of a packaged application build from the designated package and entry file; will ignore the --template-index flag. Defaults to false.
    --include-wip                              By default when building a library it will ignore modules with the string "wip" in the filename (for single-file modules) or if the "wip" property in the package.json is true. If you would like to include WIP modules set this to true or remove those properties. Defaults to false.
    --title                                    To set the <title/> of the output project index if not in --library mode. Usually set in the configuration so it will consistently build with the same title. If not specified here or in the configuration will default to the name of the project.
-   -d, --outdir                               Where to place the output files, this value is relative to the current working directory. If the value is provided by the configuration file it will be relative to the package location. Defaults to "./dist"
-   -o, --outfile                              The output filename for the compiled application HTML when not in --library mode. Defaults to "index.html".
+   -d, --outDir                               Where to place the output files, this value is relative to the current working directory. If the value is provided by the configuration file it will be relative to the package location. Defaults to "./dist"
+   -o, --outFile                              The output filename for the compiled application HTML when not in --library mode. Defaults to "index.html".
    -L, --less-plugin                          Specify a plugin that should be used when compiling Less. These are specified using subarg notation from the command-line with the first argument the name of the plugin that can be required by the build-tools followed by any arguments to be parsed and passed to the plugin at runtime. This option can be submitted multiple times. It can be configured in the configuration file as an array of objects with a "name" and "options" properties where the "options" property is an object of key-value options to be passed to the plugin. If specified from the command-line it will supersede any values from the configuration file.
 
 		Example: -L [ resolution-independence --riUnit=px ]
@@ -545,16 +543,14 @@ Options:
    -j, --inline-js                            Only used in production mode, whether or not to produce an output JS file or inline JavaScript into the index.html file; turn off with --no-inline-js. Defaults to true.
    -t, --template-index                       Instead of using the auto-generated HTML index, start from this file. Can be configured but does not have a specified default value.
    -W, --watch                                Will build the output and continue to monitor the filesystem for changes to the source files and automatically update the build. Defaults to false.
-   --watch-paths PATHS                        By default, using --watch will only target the local application (or library) source. To have it also watch additional paths use this comma-separated list to name the paths. Note that, this should be used sparingly as it can have a negative impact on performance and in some cases crash the process if there are too many files. Can be configured in the configuration file but has no defined default.
    --polling                                  When using the --watch command, this will force the watcher to use filesystem polling instead of native (and more efficient) FSEvents. Only use this is you are having an issue with the number of files being watched or are using a network filesystem mount -- WARNING -- it will SIGNIFICANTLY reduce performance. Defaults to false.
    -I INTERVAL, --polling-interval INTERVAL   When using the --polling flag, set this to the time in milliseconds to poll the filesystem for changes. Has no effect if --polling is not set. Defaults to "100".
-   -a, --analytics                            Whether or not to produce the self-contained analytics.html file with information and visualizations about the current build.  [false]
    --head-scripts                             A comma-separated list of paths relative to the current working directory of ordered JavaScript files to arbitrarily add at the beginning of all JavaScript source. In development mode these files will be loaded separately while in production they will be inlined unless the --no-inline-js flag is used. Without strict mode enabled, warnings will be issued when named files cannot be resolved. This option has no meaning in library mode [.enyoconfig option "headScripts" - ARRAY - relative paths to project].
    --tail-scripts                             A comma-separated list of paths relative to the current working directory of ordered JavaScript files to arbitrarily add at the end of all JavaScript source. In development mode these files will be loaded separately while in production they will be inlined unless the --no-inline-js flag is used. Without strict mode enabled, warnings will be issued when named files cannot be resolved. This option has no meaning in library mode [.enyoconfig option "tailScripts" - ARRAY - relative paths to project].
    --promise-polyfill                         When using the request feature for asynchronous loading the platform needs to have support for Promises. If the target platform does not support Promises or to ensure that the application can support platforms that do not have Promise support set this flag to true [.enyoconfig option "promisePolyfill" - BOOLEAN - false].
    --style-only                               Set this flag to only output final style files. All other settings apply normally [.enyoconfig option "styleOnly" - BOOLEAN - false].
 
-Build an Enyo 2.6 application and optionally watch for changes and automatically rebuild.
+Package an Enyo application or library for use in a browser.
 ```
 
 The `enyo pack` command will build your application (or in some cases, library). Using the available configuration options you can build your application with a great deal of freedom.
@@ -594,6 +590,28 @@ enyo pack --watch
 # with no extraneous files from previous runs
 enyo pack --clean
 ```
+
+#### <a name="commands-pack-auto-rebuild"></a>Automatic rebuilding using `--watch`
+
+When using `enyo pack` you can also use the `--watch` flag which begins a non-terminating process that will detect changes to your source and rebuild automatically. There are additional, relevant options `--polling` and `--polling-interval` (just `-I` for short).
+
+> On some Windows machines, older Linux machines or when using a mounted network filesystem it _may_ be necessary to set
+> the `--polling` flag. It is not advised to use the polling feature unless necessary, however, because it is CPU
+> intensive. The `--polling-interval` flag accepts an integer representing how often, in milliseconds, to poll the
+> system for changes.
+
+For more details on how the filesystem monitor works, see [chokidar](https://github.com/paulmillr/chokidar).
+
+It is very useful to see when the tool has completed its rebuild after detecting changes in the system. However, when enabling the logger utility you may get more information than you desire (all components share the same logging stream). Here is an example showing only the output from the _watcher_ component (this assumes you have _bunyan_ installed globally via `npm install -g bunyan`).
+
+```bash
+# the keys here are the -l, --log-json and the -c flag and filter string
+# passed to the bunyan process
+enyo pack -l info --log-json --watch | bunyan -o short -c 'this.component == "watcher"'
+```
+
+> It should be noted that _info_ is really just the minimum verbosity for the _watcher_ component and if need be
+> or to see more details you can increase this with _debug_ or _trace_ respectively.
 
 ##### <a name="commands-pack-errors"></a>Error handling/debugging
 
