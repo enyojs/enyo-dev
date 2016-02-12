@@ -5,7 +5,7 @@ require('babel-register')({
 });
 
 var   Packager = require('./lib/Packager')
-	, Watcher  = require('./lib/Watcher')
+	, Watcher  = require('./lib/Watcher').default
 	, setup    = require('./lib/setup').default
 	, exports  = module.exports;
 

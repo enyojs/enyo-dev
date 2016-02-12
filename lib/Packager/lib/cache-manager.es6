@@ -8,7 +8,16 @@ import clone                     from 'clone';
 import {fsync}                   from '../../util-extra';
 import {default as logger,fatal} from '../../logger';
 
-let log = logger.child({component: 'cache'});
+let didSet, baseLog;
+
+function getLog (opts) {
+	if (!didSet) {
+		baseLog = logger(opts).child({component: 'cache'});
+		baseLog.level(opts.logLevel || 'warn');
+		didSet  = true;
+	}
+	return baseLog;
+}
 
 const resetKeys = ['request', 'dependents', 'dependencies', 'bundle', 'bundleName', 'origins', 'rawContents', 'styleEntries', 'assetEntries', 'trace'];
 
@@ -18,7 +27,7 @@ class CacheStream extends Transform {
 		this.options = opts;
 		this._modules = [];
 		this._bundles = [];
-		log.level(opts.logLevel || 'warn');
+		this.log = getLog(opts);
 	}
 	_transform (bundle, nil, next) {
 		let   opts    = this.options
@@ -39,13 +48,13 @@ class CacheStream extends Transform {
 			, cache
 			, err;
 		if (opts.cache) {
-			log.info({file: opts.cacheFile}, 'Attempting to write the cache file');
+			this.log.info({file: opts.cacheFile}, 'Attempting to write the cache file');
 			cache = [];
 			modules.forEach(mod => cache.push(this._getCacheEntry(mod)));
 			this.emit('cache', cache);
 			err = writeCache(opts.cacheFile, cache);
 			if (err) {
-				log.trace(`Failed to write the cache file "${opts.cacheFile}"`, err);
+				this.log.trace(`Failed to write the cache file "${opts.cacheFile}"`, err);
 				fatal(`Failed to write the cache file "${opts.cacheFile}"`);
 			}
 			bundles.forEach(bundle => this.push(bundle));
@@ -69,22 +78,21 @@ function writeCache (file, data) {
 	return fsync.writeJson(file, data);
 }
 
-function readCache (file) {
-	log.level(logger.level());
+function readCache (file, opts) {
+	let log = getLog(opts);
 	log.debug({file}, `Attempting to read and validate the cache "${file}"`);
 	let {result: json, error} = fsync.readJson(file);
 	if (!error) {
 		log.debug(`Successfully read the cache file "${file}"`);
-		return validate(json);
+		return validate(json, opts);
 	} else {
 		log.trace(`Failed to reach cache file "${file}"`, error);
 		return error;
 	}
 }
 
-function validate (json) {
-
-	log.level(logger.level());
+function validate (json, opts) {
+	let log = getLog(opts);
 
 	if (!Array.isArray(json)) {
 		log.debug('JSON file was corrupt');
@@ -92,7 +100,9 @@ function validate (json) {
 	}
 	
 	let ret = json.filter(entry => {
-		return entry.isPackage ? validatePackage(entry) : validateFile(entry);
+		let result = entry.isPackage ? validatePackage(entry) : validateFile(entry);
+		log.trace(result ? `Keeping entry "${entry.fullpath}"` : `Discarding entry "${entry.fullpath}"`);
+		return result;
 	});
 	
 	log.debug(`Able to retain ${ret.length} of ${json.length} entries from the cache`);

@@ -55,7 +55,7 @@ export default {
 		}
 	},
 	callback (opts) {
-		let log = logger.child({component: 'init'});
+		let log = logger(opts).child({component: 'init'});
 		log.level(opts.logLevel || 'warn');
 		opts.project = path.resolve(opts.project || process.cwd());
 		opts.cwd     = opts.project;

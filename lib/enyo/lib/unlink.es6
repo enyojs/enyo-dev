@@ -8,7 +8,7 @@ import {default as logger}    from '../../logger';
 
 export default function unlink ({opts}) {
 
-	let log = logger.child({component: 'unlink'});
+	let log = logger(opts).child({component: 'unlink'});
 	log.level(opts.logLevel || 'warn');
 
 	// unlike in other tools we really can't do much with an 'env' until we know

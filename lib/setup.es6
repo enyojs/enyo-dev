@@ -14,9 +14,10 @@ import {fsync}                   from './util-extra';
 import {default as logger,fatal} from './logger';
 import {readCache}               from './Packager/lib/cache-manager';
 
-let log = logger.child({component: 'setup'});
+let log;
 
 export default function setup (opts = {}) {
+	log = logger(opts).child({component: 'setup'});
 	// we have to ensure that the requested "package" exists so that should there be a configuration
 	// file already the environment setup routine correctly reads it
 	opts.package = opts.package ? path.resolve(opts.package) : process.cwd();
@@ -64,7 +65,6 @@ function configure ({opts, env, log}) {
 	opts.inlineJs        = bool('inlineJs', opts.inlineJs, env);
 	opts.templateIndex   = clipath('templateIndex', opts.templateIndex, opts, env);
 	opts.watch           = bool('watch', opts.watch, env);
-	opts.watchPaths      = clipaths('watchPaths', opts.watchPaths, opts, env);
 	opts.polling         = bool('polling', opts.polling, env);
 	opts.pollingInterval = number('pollingInterval', opts.pollingInterval, env);
 	opts.moduleDir       = moduleDir(opts, env);
@@ -78,7 +78,7 @@ function configure ({opts, env, log}) {
 	// because the packager and watcher want the cache to be an object...
 	if (opts.cache === true && !opts.resetCache) {
 		// @TODO: Needs to validate the cache but the function was async and needs to be converted...
-		let result = readCache(opts.cacheFile);
+		let result = readCache(opts.cacheFile, opts);
 		if (result && result instanceof Error) {
 			log.trace(`Failed to read or validate the cache file "${opts.cacheFile}"`, result);
 		} else {

@@ -30,6 +30,10 @@
 	* "request" is now "enyo.request"
 	* There is a new way to use "request.isRequest" as "enyo.isRequest" when the "request" object has been injected into the bundled code (because of the presence of a "request" call in the source during build)
 	* Bundled code is no longer directly exposed to the wrapper scope
+* Added runtime flag "--log-json" to return the bunyan output to its normal "JSON" format and log to STDOUT so it can be piped to a file or to the bunyan process for filtering
+* Reworked the "watch" utility so that it already watches _all_ subpaths (before you needed to specify additional paths)
+	* Removed --watch-paths
+	* Cleaned up some of the normal output when logging for this feature, it is recommended that in order to isolate the useful output use something like the following: `enyo pack -l info --log-json --watch | bunyan -o short -c 'this.component == "watcher"'`
 
 ## Previous (0.5.3) [NOT RELEASED]
 

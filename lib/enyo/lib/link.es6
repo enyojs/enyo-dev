@@ -7,15 +7,15 @@ import {fsync,spaces}             from '../../util-extra';
 import {default as logger,stdout} from '../../logger';
 import {default as getEnv}        from './env';
 
-let   LOG    = logger.child({component: 'link'})
-	, didSet = false;
+let didSet = false, logBase;
 
 function getLog (opts) {
 	if (!didSet) {
-		LOG.level(opts.logLevel || 'warn');
+		logBase = logger(opts).child({component: 'link'});
+		logBase.level(opts.logLevel || 'warn');
 		didSet = true;
 	}
-	return LOG;
+	return logBase;
 }
 
 function checkUser (opts) {

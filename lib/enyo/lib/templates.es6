@@ -8,15 +8,15 @@ import crypto                              from 'crypto';
 import git                                 from './git';
 import {default as setup}                  from './env';
 
-let   LOG    = logger.child({component: 'templates'})
-	, didSet = false;
+let didSet = false, logBase;
 
 function getLog (opts) {
 	if (!didSet) {
-		LOG.level(opts.logLevel || 'warn');
+		logBase = logger(opts).child({component: 'templates'});
+		logBase.level(opts.logLevel || 'warn');
 		didSet = true;
 	}
-	return LOG;
+	return logBase;
 }
 
 function checkUser (opts) {

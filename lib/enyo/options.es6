@@ -20,6 +20,13 @@ export default {
 		help: 'Typically only used for debugging purposes. Available options are ' + 
 			'[fatal, error, warn, info, debug, trace]. Defaults to "warn".'
 	},
+	logJson: {
+		full: 'log-json',
+		help: 'Enable this flag to ensure the output of the logging is the normal bunayn "JSON" format to STDOUT that can be piped to their ' +
+			'separate bunyan cli tool for filtering.',
+		flag: true,
+		default: false
+	},
 	version: {
 		abbr: 'v',
 		help: 'Display the current version of the tools and exit.',

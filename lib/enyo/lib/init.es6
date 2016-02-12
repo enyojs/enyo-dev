@@ -23,7 +23,7 @@ export default function init ({opts, env}) {
 		, template  = opts.template
 		, isLibrary = !! opts.library
 		, templates = getTemplates(env)
-		, log       = logger.child({component: 'init'})
+		, log       = logger(opts).child({component: 'init'})
 		, libs;
 
 	// set a default log level appropriate the any requested from the cli

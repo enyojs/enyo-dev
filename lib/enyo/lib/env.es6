@@ -27,7 +27,7 @@ let defineProperty = Object.defineProperty;
 // returns an environment variables hash with some accessor methods
 export default function setup (opts = {}, setupEnv = true) {
 	
-	let log = logger.child({component: 'env'});
+	let log = logger(opts).child({component: 'env'});
 	log.level(opts.logLevel || 'warn');
 	
 	let env = {

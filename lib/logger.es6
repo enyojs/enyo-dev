@@ -7,12 +7,13 @@ import {default as Promise} from 'bluebird';
 // this is the "shared" root logging utility, the approach used in these tools is very flawed
 // but full-scale changes has not been possible yet
 let   stream = format({outputMode: 'short'})
-	, log    = bunyan.createLogger({name: 'enyo-dev', stream});
+	, log1   = bunyan.createLogger({name: 'enyo-dev', stream})
+	, log2   = bunyan.createLogger({name: 'enyo-dev'});
 
 // common handler for fatal errors the output might be ugly but fatal errors should
 // only occur when an edge case was unhandled
 function fatal (...args) {
-	log.fatal(...args);
+	log1.fatal(...args);
 	process.exit(-1);
 }
 
@@ -32,5 +33,11 @@ function stdout (...args) {
 	console.log(...args);
 }
 
-export default log;
-export {fatal, log, stdout};
+// there was a better way to do this but this was maintained due to time constraints
+// and the logical flow from original winston
+function getLogger (opts = {}) {
+	return opts.logJson === true ? log2 : log1;
+}
+
+export default getLogger;
+export {fatal, stdout};

@@ -232,18 +232,6 @@ export default {
 				'source files and automatically update the build. Defaults to false.',
 			flag: true
 		},
-		watchPaths: {
-			full: 'watch-paths',
-			metavar: 'PATHS',
-			help: 'By default, using --watch will only target the local application (or library) source. ' + 
-				'To have it also watch additional paths use this comma-separated list to name the paths. ' +
-				'Note that, this should be used sparingly as it can have a negative impact on performance ' +
-				'and in some cases crash the process if there are too many files. Can be configured in ' +
-				'the configuration file but has no defined default.',
-			transform (paths) {
-				return paths.trim().split(',');
-			}
-		},
 		polling: {
 			help: 'When using the --watch command, this will force the watcher to use filesystem ' +
 				'polling instead of native (and more efficient) FSEvents. Only use this is you are ' +

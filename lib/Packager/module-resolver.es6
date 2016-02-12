@@ -5,11 +5,19 @@ import {default as logger} from '../logger';
 import {fsync}             from '../util-extra';
 import {isExternal}        from '../utils';
 
-let logBase = logger.child({component: 'module-resolver'});
+let didSet = false, logBase;
 
 const FAIL    = Symbol('FAIL');
 const INVALID = Symbol('INVALID');
 const PATHS   = Symbol('PATHS');
+
+function getLog (opts) {
+	if (!didSet) {
+		logBase = logger(opts).child({component: 'module-resolver'});
+		didSet  = true;
+	}
+	return logBase;
+}
 
 export default function resolver () {
 	// allows a single, reuseable instance of the resolver with a local cache
@@ -23,7 +31,7 @@ returns an object hash with information about the module including its raw conte
 */
 function RESOLVE (cache, {opts: opts = {}, target, cwd: cwd = opts.cwd || process.cwd(), paths: paths = []}) {
 
-	let   log = logBase.child({target, cwd})
+	let   log = getLog(opts).child({target, cwd})
 		, result;
 
 	log.level(opts.logLevel || 'warn');
