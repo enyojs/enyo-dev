@@ -161,42 +161,21 @@ defined with inline comments.
   // the list of default libraries to be included in the project's "libDir"
   "libraries": [
     "enyo",
-    "layout",
-    "canvas",
-    "svg",
-    "moonstone",
-    "onyx",
-    "spotlight",
-    "enyo-webos",
-    "enyo-ilib"
+    "layout"
   ],
   
   // a map of library names to their location from where they can be retrieved
   "sources": {
     "enyo": "https://github.com/enyojs/enyo.git",
-    "layout": "https://github.com/enyojs/layout.git",
-    "canvas": "https://github.com/enyojs/canvas.git",
-    "svg": "https://github.com/enyojs/svg.git",
-    "moonstone": "https://github.com/enyojs/moonstone.git",
-    "onyx": "https://github.com/enyojs/onyx.git",
-    "spotlight": "https://github.com/enyojs/spotlight.git",
-    "enyo-webos": "https://github.com/enyojs/enyo-webos.git",
-    "enyo-ilib": "https://github.com/enyojs/enyo-ilib.git"
+    "layout": "https://github.com/enyojs/layout.git"
   },
   
   // a map of library names to the intended target if it is not "master" and can
   // be a branch, tag or specific commit hash - if not present will be assumed as
   // "master"
   "targets": {
-    "enyo": "2.6.0-dev",
-    "layout": "2.6.0-dev",
-    "canvas": "2.6.0-dev",
-    "svg": "master",
-    "moonstone": "2.6.0-dev",
-    "onyx": "2.6.0-dev",
-    "spotlight": "2.6.0-dev",
-    "enyo-webos": "2.6.0-dev",
-    "enyo-ilib": "2.6.0-dev"
+    "enyo": "master",
+    "layout": "master"
   },
   
   // whether or not to build in production mode
@@ -214,9 +193,6 @@ defined with inline comments.
   // used for --watch mode, if you have already built, this will
   // cause the server/system to startup almost instantly (as long as the cache is valid)
   "trustCache": false,
-  
-  // the name of the cache file to read/write from/to
-  "cacheFile": ".enyocache",
   
   // if set to true will delete all files in the outdir if they exist to ensure the only
   // files remaining after a build are related to the latest build
@@ -241,10 +217,10 @@ defined with inline comments.
   "wip": false,
   
   // the output directory for build files
-  "outdir": "./dist",
+  "outDir": "./dist",
   
   // when not in library mode, the name of the output HTML file
-  "outfile": "index.html",
+  "outFile": "index.html",
   
   // object entries with a "name" and "options" hash for the named less plugins
   "lessPlugins": [],
@@ -281,16 +257,11 @@ defined with inline comments.
   // whether or not to run the watcher utility
   "watch": false,
   
-  // additional paths to watch instead of just the application/local source, can be costly on some
-  // systems that don't support native filesystem events
-  "watchPaths": [],
-  
   // some systems will require polling, especially if using network-mounted filesystems
   "polling": false,
   
   // when using polling, this is the interval in milliseconds it will poll for changes
   "pollingInterval": 100,
-  
     
   // add scripts before all other scripts in the final output, no meaning
   // in library mode
