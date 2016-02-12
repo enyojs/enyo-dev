@@ -47,7 +47,7 @@ The enyo-dev module is a collection of tools designed to aid in building Enyo ap
 
 #### <a name="setup-reqs"></a>Requirements
 
-In order to use these tools you need to ensure you have Node version `0.12.2` or higher. You can acquire [Node](https://nodejs.org/download/) in various ways including their pre-built binary or installation packages. Ensure that the correct version of Node and npm are available from the terminal/console of your operating system and that you have the correct permissions to install _npm packages globally_. You can check your current version of Node by issuing the following command:
+In order to use these tools you need to ensure you have Node version `5.0.0` or higher. You can acquire [Node](https://nodejs.org/download/) in various ways including their pre-built binary or installation packages. Ensure that the correct version of Node and npm are available from the terminal/console of your operating system and that you have the correct permissions to install _npm packages globally_. You can check your current version of Node by issuing the following command:
 
 ```bash
 node --version

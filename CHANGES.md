@@ -4,6 +4,7 @@
 
 ## Overview (1.0.0)
 
+* Unfortunately, and perhaps temporarily, the required version of node has been bumped to `>=5.0.0`
 * The commands `enyo serve`, `enyo config` and `enyo find-links` and all related aliases have been removed
 * The commands `enyo init`, `enyo link` and `enyo unlink` have been rewritten to accommodate the "templates" feature being added, please review the command-line options for more information and to see what new flags have been added and which have been modified or removed from previous releases
 * Added the command `enyo templates` and the notion of `enyo init` using raw templates for new projects
