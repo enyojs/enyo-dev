@@ -23,7 +23,7 @@ process.on('uncaughtException', fatal);
 // we register this handler because if/when we hit these issues we need to try and
 // understand where they come from since, ideally, they would all be handled
 process.on('unhandledRejection', (reason) => {
-	log.trace({reason: reason.toString()}, 'Unhandled Promise rejection event encountered, it is impossible to retrieve a stack-trace for this error');
+	log1.trace({reason: reason.toString()}, 'Unhandled Promise rejection event encountered, it is impossible to retrieve a stack-trace for this error');
 	fatal(`A fatal error has been encountered, please use "trace" logging for more information on this issue`);
 });
 
