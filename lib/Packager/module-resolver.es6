@@ -372,9 +372,19 @@ function EXPAND (target, log, cache, opts, cwd) {
 				return result;
 			}
 		}
-		if (result.json && result.json.moduleDir) {
-			log.trace({function: 'EXPAND'}, `Expanding step "${step}" with "moduleDir" "${result.json.moduleDir}"`);
-			step = path.join(step, result.json.moduleDir);
+		if(result.json) {
+			let moduleDir = result.json.moduleDir;
+			if (!moduleDir) {
+				let libDir = path.join(opts.cwd, opts.libDir, dir);
+				if (libDir === step) {
+					// default moduleDir for libraries is 'src'
+					moduleDir = 'src';
+				}
+			}
+			if (moduleDir) {
+				log.trace({function: 'EXPAND'}, `Expanding step "${step}" with "moduleDir" "${result.json.moduleDir}"`);
+				step = path.join(step, moduleDir);
+			}
 		}
 	}
 	
