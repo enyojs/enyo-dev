@@ -351,7 +351,7 @@ function EXPAND (target, log, cache, opts, cwd) {
 
 	let   root  = cwd || opts.package || opts.cwd || process.cwd()
 		, base  = path.relative(root, target)
-		, steps = base.split('/')
+		, steps = base.split(path.sep)
 		, step  = root
 		, result;
 		
@@ -399,7 +399,7 @@ function RESOLVE_NODE_MODULE (target, cwd, log, cache, opts) {
 	log.trace({function: 'RESOLVE_NODE_MODULE'}, `Resolving CommonJS module "${target}" via normal means from "${cwd}"`);
 
 	let   root     = opts.package || opts.cwd || process.cwd()
-		, steps    = path.relative(root, cwd).split('/')
+		, steps    = path.relative(root, cwd).split(path.sep)
 		, step     = path.resolve(root, cwd)
 		, lastLoop = false
 		, result;
@@ -422,7 +422,7 @@ function RESOLVE_NODE_MODULE (target, cwd, log, cache, opts) {
 			}
 		}
 		steps.pop();
-		step = path.join(root, steps.join('/'));
+		step = path.join(root, steps.join(path.sep));
 		if (step == root && !lastLoop) lastLoop = true;
 		else lastLoop = false;
 	} while (steps.length || lastLoop);
