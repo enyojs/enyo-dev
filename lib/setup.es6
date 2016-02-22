@@ -129,7 +129,7 @@ function clipath (name, value, opts, env) {
 }
 
 function clipaths (name, value, opts, env) {
-	let   values = resolveArrayOfPaths(value, env.cwd)
+	let   values = resolveArrayOfPaths(value, opts.cwd)
 		, defs   = resolveArrayOfPaths(defaults(name, env), opts.package);
 	return values.concat(defs).filter((p, i, arr) => {
 		return arr.indexOf(p) === i;

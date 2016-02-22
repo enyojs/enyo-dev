@@ -375,8 +375,8 @@ function EXPAND (target, log, cache, opts, cwd) {
 		if(result.json) {
 			let moduleDir = result.json.moduleDir;
 			if (!moduleDir) {
-				let libDir = path.join(opts.cwd, opts.libDir, dir);
-				if (libDir === step) {
+				let parent = path.join(step, '..');
+				if (opts.paths.indexOf(parent)>-1) {
 					// default moduleDir for libraries is 'src'
 					moduleDir = 'src';
 				}
