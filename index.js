@@ -1,7 +1,8 @@
 'use strict';
 
 require('babel-register')({
-	extensions: ['.es6']
+	extensions: ['.es6'],
+	only: /enyo-dev\/(?!(node_modules))/
 });
 
 var   Packager = require('./lib/Packager')
