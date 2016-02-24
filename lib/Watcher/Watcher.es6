@@ -147,10 +147,10 @@ export default class Watcher extends EventEmitter {
 		}
 		if (update) this.LTSTAMP = process.hrtime();
 	}
-	notice () {
+	notice (...args) {
 		let level = log.level();
 		log.level('info');
-		log.info.apply(log, arguments);
+		log.info(...args);
 		log.level(level);
 	}
 }
