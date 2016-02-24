@@ -32,6 +32,7 @@ export default class Watcher extends EventEmitter {
 		this.monitorInit();
 		
 		if (!opts.trustCache || !opts.cache || !Array.isArray(opts.cache)) {
+			this.notice('Creating initial build');
 			log.info('Need to build from source, cannot trust the cache');
 			this.options.cache = [];
 			this.build();
@@ -72,7 +73,7 @@ export default class Watcher extends EventEmitter {
 			this.BWAITING = false;
 			return this.build();
 		}
-		log.info(`Build completed ${err ? 'with' : 'without'} errors`);
+		this.notice(`Build completed ${err ? 'with' : 'without'} errors`);
 		this.emit('end', err);
 	}
 	packagerCache (cache) {
@@ -132,8 +133,12 @@ export default class Watcher extends EventEmitter {
 				this.TIMER_ID = null;
 				if (diff > this.TWAIT) {
 					log.trace('Threshold was satisfied, will trigger build');
-					if (this.BUILDING) this.BWAITING = true;
-					else this.build();
+					if (this.BUILDING) {
+						this.BWAITING = true;
+					} else {
+						this.notice('File change detected; rebuilding');
+						this.build();
+					};
 				} else {
 					log.trace('Threshold bounced, resetting the timer');
 					this.trigger(false);
@@ -141,5 +146,11 @@ export default class Watcher extends EventEmitter {
 			}, 800);
 		}
 		if (update) this.LTSTAMP = process.hrtime();
+	}
+	notice (...args) {
+		let level = log.level();
+		log.level('info');
+		log.info(...args);
+		log.level(level);
 	}
 }
