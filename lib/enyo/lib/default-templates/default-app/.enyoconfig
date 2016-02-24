@@ -2,9 +2,15 @@
   "title": "",
   "libDir": "lib",
   "paths": [],
-  "libraries": [],
-  "sources": {},
-  "targets": {},
+  "libraries": [
+    "enyo"
+  ],
+  "sources": {
+    "enyo": "https://github.com/enyojs/enyo.git"
+  },
+  "targets": {
+    "enyo": "2.6.0-dev"
+  },
   "production": false,
   "devMode": true,
   "cache": true,
