@@ -17,7 +17,7 @@
 * The `--scriptSafe` and the configurable `scriptSafe` JSON option have been removed
 	* The equivalent can be achieved only with a runtime flag for all commands `--no-user`
 * The `--config-file` option has been removed (it never really worked and is incompatible with architectural decisions)
-* When initializing a project now, if using one of the built-in _bare_ templates, it will not include any library dependencies
+* When initializing a project now, if using one of the built-in _bare_ templates, it will only include the enyp library dependency
 * The `epack`, `egen`, `enyo-gen` and `enyo-pack` aliases have been removed
 * You can only make libraries linkable system-wide, previously you could also make apps linkable
 * The logging output now pre-formats the output to be human readable without piping to the external _bunyan_ process
