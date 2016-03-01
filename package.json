@@ -20,7 +20,7 @@
   ],
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=0.12.2"
+    "node": ">=4.0.0"
   },
   "dependencies": {
     "archy": "^1.0.0",
