@@ -573,7 +573,7 @@ When using `enyo pack` you can also use the `--watch` flag which begins a non-te
 
 For more details on how the filesystem monitor works, see [chokidar](https://github.com/paulmillr/chokidar).
 
-It is very useful to see when the tool has completed its rebuild after detecting changes in the system. However, when enabling the logger utility you may get more information than you desire (all components share the same logging stream). Here is an example showing only the output from the _watcher_ component (this assumes you have _bunyan_ installed globally via `npm install -g bunyan`).
+It is very useful to use a more verbose logging level with the _watcher_ to observe more details and events as they occur. However, when enabling the logger utility you may get more information than you desire (all components share the same logging stream). Here is an example showing only the output from the _watcher_ component (this assumes you have _bunyan_ installed globally via `npm install -g bunyan`).
 
 ```bash
 # the keys here are the -l, --log-json and the -c flag and filter string
