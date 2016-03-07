@@ -1,9 +1,9 @@
 'use strict';
 
-import path                from 'path';
-import {default as logger} from '../logger';
-import {fsync}             from '../util-extra';
-import {isExternal}        from '../utils';
+import path                     from 'path';
+import {default as logger}      from '../logger';
+import {fsync}                  from '../util-extra';
+import {isExternal, isRelative} from '../utils';
 
 let didSet = false, logBase;
 
@@ -69,7 +69,8 @@ function RESOLVE_PATH (target, cwd, log, cache, opts) {
 	if (result === FAIL || result === INVALID) {
 		result = RESOLVE_PACKAGE(fullpath, log, cache, opts);
 		if (result === FAIL || result === INVALID) {
-			if (fullpath > cwd) {
+			// prevent expanding the path when the target module is specified relatively
+			if (fullpath > cwd && !isRelative(target)) {
 				let   base = path.dirname(fullpath)
 					, exp  = EXPAND(base, log, cache, opts, cwd);
 				if (exp !== INVALID && exp !== FAIL) {
@@ -141,14 +142,12 @@ function RESOLVE_EXTERNAL (target, cwd, log, cache, opts, paths) {
 
 /*
 */
-function RESOLVE_FILE (target, log, cache, opts, expand = true) {
+function RESOLVE_FILE (target, log, cache, opts) {
 
 	log.trace({function: 'RESOLVE_FILE'}, `Resolving file "${target}"`);
 
 	// we first attempt to resolve the file as requested
 	// if that fails we attempt, if necessary, to add the .js suffix to it
-	// if that still doesn't work we expand all of the intermediate paths to see if
-	// they can be resolved to something else because of the moduleDir property
 	
 	let   file = target
 		, ext  = path.extname(target)
@@ -167,30 +166,7 @@ function RESOLVE_FILE (target, log, cache, opts, expand = true) {
 				return result;
 			} else log.trace({function: 'RESOLVE_FILE'}, `Failed to find module for "${target}" with "${file}"`);
 		}
-		
-		if (!expand) return FAIL;
 
-		// now we need to try and expand the path to see if that makes a difference
-		file           = target;
-		let   base     = path.dirname(target)
-			, expanded = EXPAND(base, log, cache, opts);
-		
-		if (expanded === INVALID || expanded === FAIL || expanded == base) {
-			log.trace({function: 'RESOLVE_FILE'}, `Path "${base}" could not be expanded`);
-			return FAIL;
-		}
-		
-		file = path.join(expanded, path.basename(target));
-		
-		log.trace({function: 'RESOLVE_FILE'}, `Testing with expanded path "${file}"`);
-		
-		result = RESOLVE_FILE(file, log, cache, opts, false);
-		if (result === FAIL || result === INVALID) {
-			log.trace({function: 'RESOLVE_FILE'}, 'Failed to find module with expanded path');
-			return FAIL;
-		}
-		log.trace({function: 'RESOLVE_FILE'}, `Successfully found module for "${target}" at "${result.fullpath}"`);
-		cache[target] = result;
 		return result;
 	} else if (result === INVALID) {
 		log.trace({function: 'RESOLVE_FILE'}, `Invalid object-type found for path "${target}"`);
@@ -263,7 +239,7 @@ function RESOLVE_PACKAGE (target, log, cache, opts) {
 	// it will already be cached at this point by the RESOLVE_DIRECTORY method
 	if (result.isPackage) {
 		let   mainf = path.join(result.fullpath, result.json.main || 'index.js')
-			, main  = RESOLVE_FILE(mainf, log, cache, opts, false);
+			, main  = RESOLVE_FILE(mainf, log, cache, opts);
 		if (main === FAIL || main === INVALID) {
 			log.trace({function: 'RESOLVE_PACKAGE'}, `Could not resolve "main" file for package "${result.fullpath}"`);
 			return result;
