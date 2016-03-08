@@ -5,8 +5,7 @@
   "main": "index.js",
   "moduleDir": "src",
   "assets": [
-    "favicon.ico",
-    "assets/*.*"
+    "favicon.ico"
   ],
   "styles": [
     "css/*.less",
