@@ -7,6 +7,7 @@
     "moonstone",
     "spotlight",
     "layout",
+    "svg",
     "enyo-ilib"
   ],
   "sources": {
@@ -14,6 +15,7 @@
     "moonstone": "https://github.com/enyojs/moonstone.git",
     "spotlight": "https://github.com/enyojs/spotlight.git",
     "layout": "https://github.com/enyojs/layout.git",
+    "svg": "https://github.com/enyojs/svg.git",
     "enyo-ilib": "https://github.com/enyojs/enyo-ilib.git"
   },
   "targets": {
@@ -21,6 +23,7 @@
     "moonstone": "2.6.0-dev",
     "spotlight": "2.6.0-dev",
     "layout": "2.6.0-dev",
+    "svg": "master",
     "enyo-ilib": "2.6.0-dev"
   },
   "production": false,
