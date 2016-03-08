@@ -6,7 +6,7 @@
   "moduleDir": "src",
   "assets": [
     "favicon.ico",
-    "assets/*.*"
+    "assets/**/*.*"
   ],
   "styles": [
     "css/*.less",
