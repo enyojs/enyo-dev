@@ -1,0 +1,28 @@
+{
+  "name": "onyx-app",
+  "version": "0.0.1",
+  "description": "An Enyo-based template to build web applications using HTML, CSS and JavaScript.",
+  "main": "index.js",
+  "moduleDir": "src",
+  "assets": [
+    "assets/*.*"
+  ],
+  "styles": [
+    "css/*.less",
+    "css/*.css"
+  ],
+  "homepage": "http://enyojs.com/",
+  "bugs": "http://jira.enyojs.com/",
+  "maintainers": [
+    {
+      "name": "Enyo JS Framework Team",
+      "web": "http://enyojs.com/"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ]
+}
