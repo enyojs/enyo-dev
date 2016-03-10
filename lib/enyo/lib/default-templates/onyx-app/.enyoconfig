@@ -3,13 +3,22 @@
   "libDir": "lib",
   "paths": [],
   "libraries": [
-    "enyo"
+    "enyo",
+    "onyx",
+    "layout",
+    "enyo-ilib"
   ],
   "sources": {
-    "enyo": "https://github.com/enyojs/enyo.git"
+    "enyo": "https://github.com/enyojs/enyo.git",
+    "onyx": "https://github.com/enyojs/onyx.git",
+    "layout": "https://github.com/enyojs/layout.git",
+    "enyo-ilib": "https://github.com/enyojs/enyo-ilib.git"
   },
   "targets": {
-    "enyo": "2.6.0-dev"
+    "enyo": "2.6.0-dev",
+    "onyx": "2.6.0-dev",
+    "layout": "2.6.0-dev",
+    "enyo-ilib": "2.6.0-dev"
   },
   "production": false,
   "devMode": true,
