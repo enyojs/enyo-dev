@@ -23,6 +23,7 @@
   "outFile": "index.html",
   "lessPlugins": [],
   "assetRoots": [],
+  "assetDir": ".",
   "lessOnlyLess": false,
   "minifyCss": false,
   "inlineCss": true,

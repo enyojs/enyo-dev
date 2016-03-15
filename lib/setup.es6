@@ -58,6 +58,7 @@ function configure ({opts, env, log}) {
 	opts.outFile         = string('outFile', opts.outFile, env);
 	opts.lessPlugins     = lessPlugins(opts, env);
 	opts.assetRoots      = assetRoots(opts, env);
+	opts.assetDir         = string('assetDir', opts.assetDir, env);
 	opts.lessOnlyLess    = bool('lessOnlyLess', opts.lessOnlyLess, env);
 	opts.minifyCss       = opts.production ? opts.minifyCss !== false : bool('minifyCss', opts.minifyCss, env);
 	opts.inlineCss       = bool('inlineCss', opts.inlineCss, env);

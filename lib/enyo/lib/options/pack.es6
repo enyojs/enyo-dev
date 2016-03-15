@@ -169,6 +169,11 @@ export default {
 				return {name: e[0], path: e[1]};
 			}
 		},
+		assetDir: {
+			abbr: 'a',
+			help: 'Where to place the assets files, from both the app and its libraries. This value is relative to the output directory. ' +
+				'Defaults to "."'
+		},
 		lessOnlyLess: {
 			full: 'less-only-less',
 			help: 'To ensure that only less files are passed through to the less compiler set this flag ' +
