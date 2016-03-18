@@ -95,12 +95,12 @@ function getLocalEnv ({log, cwd}) {
 		, configFile    = path.join(cwd, '.enyoconfig')
 		, {result: pkg} = fsync.readJson(packageFile)
 		, {result: cfg} = fsync.readJson(configFile)
-		, isProject     = !! (cfg && pkg && (pkg.name || cfg.name));
+		, isProject     = !! (pkg && (pkg.name || (cfg && cfg.name)));
 	
 	let loc = {
 		// we don't want to be able to modify non-project package.json files so we try to be
 		// selective here
-		config: isProject && cfg,
+		config: cfg || {},
 		package: isProject && pkg,
 		isProject
 	};
