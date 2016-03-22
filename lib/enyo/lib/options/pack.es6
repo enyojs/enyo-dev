@@ -1,10 +1,11 @@
 'use strict';
 
 import minimist   from 'minimist';
+import nom from 'nomnom';
 import {packager} from '../../../../index';
 import {subargs}  from '../../../utils';
 
-export default {
+let pack = {
 	name: 'pack',
 	help: 'Package an Enyo application or library for use in a browser.',
 	callback (opts) {
@@ -285,6 +286,30 @@ export default {
 				'[.enyoconfig option "styleOnly" - BOOLEAN - false].'
 		},
 		
+		// PRIVATE HELPERS NOT FOR PUBLIC
+
+		subpackage: {
+			hidden: true,
+			full: 'subpackage',
+			abbr: 'S',
+			help: 'Specify a subpackage within the current package that should also be built, with the ability ' +
+				'for shared assets. After a suppackage is declared, any standard enyo-dev package options are allowed. ' +
+				'May be used multiple times for multiple subpackages. Note: paths used in options must be relative to ' +
+				'the subpackage itself. Subpackage will be skipped/ignored when --Watch option is in usage.' +
+				'\n\n\t\tExample: -S [ ./subapp --production ]\n',
+			list: true,
+			transform (line) {
+				let   e = subargs(line.slice(1,-1).trim())
+					, t = e.shift()
+					, r = {};
+				if(e.length) {
+					nom();
+					r = nom.parse(e);
+				}
+				return {name: t, options: r};
+			}
+		},
+		
 		// DEVELOPMENT HELPERS NOT PUBLIC
 	
 		TEST_LIB_MODE: {
@@ -294,3 +319,5 @@ export default {
 		}
 	}
 };
+
+export default pack;
