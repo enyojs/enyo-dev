@@ -59,7 +59,7 @@ export default {
 		log.level(opts.logLevel || 'warn');
 		opts.project = path.resolve(opts.project || process.cwd());
 		opts.cwd     = opts.project;
-		init({opts, env: env(opts)}).catch(e => {
+		return init({opts, env: env(opts)}).catch(e => {
 			log.warn(e);
 		});
 	}

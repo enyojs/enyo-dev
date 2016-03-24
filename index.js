@@ -5,11 +5,23 @@ require('babel-register')({
 	only: /enyo-dev\/(?!(node_modules))/
 });
 
-var	EventEmitter = require('events').EventEmitter,
-	Packager = require('./lib/Packager')
+var	EventEmitter = require('events').EventEmitter
+	, init  = require('./lib/enyo/lib/options/init').default
+	, Packager = require('./lib/Packager')
 	, Watcher  = require('./lib/Watcher').default
 	, setup    = require('./lib/setup').default
 	, exports  = module.exports;
+
+exports.initialize = function initialize (opts) {
+	opts = opts || {};
+	opts.project = opts['package'];
+	opts.initLibs = (typeof opts.initLibs === 'boolean') ? opts.initLibs : true;
+	var emitter = new EventEmitter();
+	init.callback(opts).then(function() {
+		emitter.emit('end');
+	});
+	return emitter;
+};
 
 exports.packager = function packager (opts) {
 	opts = opts || {};
