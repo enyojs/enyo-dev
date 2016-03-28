@@ -105,6 +105,10 @@ function getLocalEnv ({log, cwd}) {
 		isProject
 	};
 	
+	// temporary fallback for lowercase outdir/outfile properties
+	if (!loc.config.outFile && loc.config.outfile) loc.config.outFile = loc.config.outfile;
+	if (!loc.config.outDir && loc.config.outdir) loc.config.outDir = loc.config.outdir;
+	
 	if (isProject && loc.config)  defineProperty(loc, 'setConfig', {value: updateLocalConfig.bind(loc, log, configFile), enumerable: true, writable: true});
 	if (isProject && loc.package) defineProperty(loc, 'setPackage', {value: updateLocalPackage.bind(loc, log, packageFile), enumerable: true, writable: true});
 		
