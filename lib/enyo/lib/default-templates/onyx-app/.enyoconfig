@@ -15,10 +15,10 @@
     "enyo-ilib": "https://github.com/enyojs/enyo-ilib.git"
   },
   "targets": {
-    "enyo": "2.6.0-dev",
-    "onyx": "2.6.0-dev",
-    "layout": "2.6.0-dev",
-    "enyo-ilib": "2.6.0-dev"
+    "enyo": "2.7.0",
+    "onyx": "2.7.0",
+    "layout": "2.7.0",
+    "enyo-ilib": "2.7.0"
   },
   "production": false,
   "devMode": true,
