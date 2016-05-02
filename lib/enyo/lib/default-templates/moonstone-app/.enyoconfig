@@ -19,12 +19,12 @@
     "enyo-ilib": "https://github.com/enyojs/enyo-ilib.git"
   },
   "targets": {
-    "enyo": "2.7.0",
-    "moonstone": "2.7.0",
-    "spotlight": "2.7.0",
-    "layout": "2.7.0",
-    "svg": "2.7.0",
-    "enyo-ilib": "2.7.0"
+    "enyo": "master",
+    "moonstone": "master",
+    "spotlight": "master",
+    "layout": "master",
+    "svg": "master",
+    "enyo-ilib": "master"
   },
   "production": false,
   "devMode": true,

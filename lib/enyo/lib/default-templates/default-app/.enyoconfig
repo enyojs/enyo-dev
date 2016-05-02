@@ -9,7 +9,7 @@
     "enyo": "https://github.com/enyojs/enyo.git"
   },
   "targets": {
-    "enyo": "2.7.0"
+    "enyo": "master"
   },
   "production": false,
   "devMode": true,
