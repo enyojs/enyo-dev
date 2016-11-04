@@ -94,7 +94,9 @@ function ensureJsonFileSync (file, serial) {
 		parts = path.parse(file);
 		err   = ensureDirSync(parts.dir);
 		if (err) return err;
-		({result, error: err} = serial ? stringify(serial) : { result: '' });
+		var val = serial ? stringify(serial) : { result: '' };
+		result = val.result;
+		err = val.error;
 		if (err) return err;
 		return writeFileSync(file, result, 'utf8');
 	}
