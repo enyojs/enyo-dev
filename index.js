@@ -1,10 +1,5 @@
 'use strict';
 
-require('babel-register')({
-	extensions: ['.es6'],
-	only: /enyo-dev\/(?!(node_modules))/
-});
-
 var	EventEmitter = require('events').EventEmitter
 	, init  = require('./lib/enyo/lib/options/init').default
 	, Packager = require('./lib/Packager')
