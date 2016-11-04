@@ -25,7 +25,7 @@ function stringify (json, pretty) {
 		// log.trace({json, error: e, function: 'stringify'}, 'Failed to stringify JSON object');
 		err = e;
 	}
-	return {result, error: err};
+	return {result:result, error: err};
 }
 exports.stringify = stringify;
 
@@ -53,7 +53,7 @@ function readJsonSync (file) {
 		// log.trace({file, error: e, function: 'readJsonSync'}, 'Failed to read JSON file');
 		error  = e;
 	}
-	return {result, error};
+	return {result:result, error:error};
 }
 defineProperty(fsync, 'readJson', {value: readJsonSync, enumerable: true});
 
@@ -330,7 +330,7 @@ function readFileSync (file, enc) {
 		// log.trace({error: e, function: 'readFileSync', source: file, enc}, 'Failed to read file');
 		error  = e;
 	}
-	return {result, error};
+	return {result:result, error:error};
 }
 defineProperty(fsync, 'readFile', {value: readFileSync, enumerable: true});
 
@@ -394,7 +394,7 @@ function readDirSync (dir) {
 		// log.trace({error: e, function: 'readDirSync', source: dir}, 'Failed to read directory');
 		error = e;
 	}
-	return {result: result || [], error};
+	return {result: result || [], error:error};
 }
 defineProperty(fsync, 'readDir', {value: readDirSync, enumerable: true});
 defineProperty(fsync, 'readdir', {value: readDirSync, enumerable: true});
@@ -516,5 +516,5 @@ exports.parseGitUri = function parseGitUri (str, defaultTarget) {
 		var ext = path.extname(name);
 		if (ext) name = name.slice(0, -ext.length);
 	}
-	return {uri, target, name};
+	return {uri:uri, target:target, name:name};
 };
