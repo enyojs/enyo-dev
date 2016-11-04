@@ -194,7 +194,7 @@ function copyDirSync (dir, target, clean) {
 }
 defineProperty(fsync, 'copyDir', {value: copyDirSync, enumerable: true});
 
-function copyLinkDirSync (dir, target, clean = false) {
+function copyLinkDirSync (dir, target, clean) {
 	clean = (clean===undefined) ? false : clean;
 	var rp = realpathSync(dir);
 	if (!rp) return new Error('Failed to determine the realpath of "' + dir + '"');
