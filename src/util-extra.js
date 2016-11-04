@@ -1,23 +1,24 @@
 'use strict';
 
-import fs              from 'fs';
-import path            from 'path';
+var fs = require('fs');
+var path = require('path');
 
-let   defineProperty = Object.defineProperty
+var   defineProperty = Object.defineProperty
 	, freeze         = Object.freeze
 	, join           = path.join
 	, resolve        = path.resolve;
 
 // this is not a sophisticated way of doing this but we use this later to ensure we don't overwrite
 // the project...
-const ROOT_DIR = join(__dirname, '..');
-	
+var ROOT_DIR = join(__dirname, '..');
+
 /*
 Attempts to JSON stringify the given serializable object. Optionally (default) makes
 the output pretty. Returns { result, error }.
 */
-function stringify (json, pretty = true) {
-	let result, err;
+function stringify (json, pretty) {
+	pretty = (pretty===undefined) ? true : pretty;
+	var result, err;
 	try {
 		result = JSON.stringify(json, null, pretty ? 2 : null);
 	} catch (e) {
@@ -26,25 +27,26 @@ function stringify (json, pretty = true) {
 	}
 	return {result, error: err};
 }
-export {stringify};
+exports.stringify = stringify;
 
 /*
 Helper function for output string formatting but returning a string of spaces.
 */
-function spaces (num = 0) {
+function spaces (num) {
+	num = (num===undefined) ? 0 : num;
 	return num > 0 ? ' '.repeat(num) : '';
 }
-export {spaces};
+exports.spaces = spaces;
 
 /*
 A collection of wrapped, synchronous file IO operations.
 */
-let fsync = {};
+var fsync = {};
 
 /*
 */
 function readJsonSync (file) {
-	let result, error;
+	var result, error;
 	try {
 		result = JSON.parse(fs.readFileSync(file, 'utf8'));
 	} catch (e) {
@@ -58,7 +60,7 @@ defineProperty(fsync, 'readJson', {value: readJsonSync, enumerable: true});
 /*
 */
 function writeJsonSync (file, data) {
-	let json, err;
+	var json, err;
 
 	file = resolve(file);
 
@@ -82,7 +84,7 @@ defineProperty(fsync, 'writeJson', {value: writeJsonSync, enumerable: true});
 /*
 */
 function ensureJsonFileSync (file, serial) {
-	let   exists = existsSync(file)
+	var   exists = existsSync(file)
 		, parts
 		, result
 		, err;
@@ -100,7 +102,7 @@ defineProperty(fsync, 'ensureJsonFile', {value: ensureJsonFileSync, enumerable: 
 /*
 */
 function ensureDirSync (dir) {
-	let   paths = getNormalizedPaths(dir)
+	var   paths = getNormalizedPaths(dir)
 		, toAdd = []
 		, pre   = ''
 		, done  = paths.length ? false : true
@@ -110,15 +112,15 @@ function ensureDirSync (dir) {
 		else pre = path.sep;
 	}
 	while (!done) {
-		let next = pre + paths.join(path.sep), stat, rpath;
+		var next = pre + paths.join(path.sep), stat, rpath;
 		stat = statSync(next);
 		if (stat) {
-			if (stat.isFile())     return new Error(`Attempt to create directory path that contains a file at ${next}`);
+			if (stat.isFile())     return new Error('Attempt to create directory path that contains a file at ' + next);
 			if (stat.isSymbolicLink()) {
 				rpath = fs.realpathSync(next);
 				stat  = statSync(rpath);
-				if (!stat)         return new Error(`Could not retrieve real path for symbolic link ${next}`);
-				if (stat.isFile()) return new Error(`Symbolic link at ${next} resolves to file at ${rpath}`);
+				if (!stat)         return new Error('Could not retrieve real path for symbolic link ' + next);
+				if (stat.isFile()) return new Error('Symbolic link at ' + next + ' resolves to file at ' + rpath);
 			}
 			done = stat.isDirectory();
 		} else done = false;
@@ -137,22 +139,23 @@ defineProperty(fsync, 'ensureDir', {value: ensureDirSync, enumerable: true});
 /*
 This operation should be used sparingly because of its slowness and memory consumption.
 */
-function copyDirSync (dir, target, clean = false) {
-	let err, files;
+function copyDirSync (dir, target, clean) {
+	var err, files;
+	clean = (clean===undefined) ? false : clean;
 
 	dir    = resolve(dir);
 	target = resolve(target);
 
 	if (!existsSync(dir)) {
 		// log.trace({function: 'copyDirSync', source: dir, target}, 'Source directory does not exist');
-		return new Error(`Cannot copy ${dir}, directory does not exist`);
+		return new Error('Cannot copy ' + dir + ', directory does not exist');
 	}
 
-	// this not by any means a sophisticated or complete sanity check but is mostly to keep accidental
+	// this not by any means a sophisticated or compvare sanity check but is mostly to keep accidental
 	// development tests from overwriting important files
 	if (target == ROOT_DIR || target.indexOf(ROOT_DIR) > -1) {
 		// log.trace({function: 'copyDirSync', source: dir, target}, 'Attempt to overwrite enyo-dev system directory');
-		return new Error(`Cannot replace or copy to enyo-dev module source location "${target}"`);
+		return new Error('Cannot replace or copy to enyo-dev module source location "' + target + '"');
 	}
 	
 	// for now we don't really care if this errors because it would error if it didn't exist
@@ -161,14 +164,14 @@ function copyDirSync (dir, target, clean = false) {
 	err = ensureDirSync(target);
 	if (err) {
 		// log.trace({error: err, function: 'copyDirSync', source: dir, target}, 'Failed to ensure target directory');
-		return new Error(`Failed to ensure target directory from ${dir} to ${target}: ${err.message}`);
+		return new Error('Failed to ensure target directory from ' + dir +' to ' + target + ': ' + err.message);
 	}
 
 	({result: files} = readDirSync(dir));
-	// we will let all errors in recursive runs be produced and if there is an error at the end
+	// we will var all errors in recursive runs be produced and if there is an error at the end
 	// will return an error about failing the operation even though some of it might have been ok
-	for (let i = 0; i < files.length; ++i) {
-		let   src  = join(dir, files[i])
+	for (var i = 0; i < files.length; ++i) {
+		var   src  = join(dir, files[i])
 			, tgt  = join(target, files[i])
 			, stat = statSync(src);
 		if      (stat.isDirectory())    err = copyDirSync(src, tgt);
@@ -176,20 +179,21 @@ function copyDirSync (dir, target, clean = false) {
 		else if (stat.isSymbolicLink()) err = copySymbolicLinkSync(src, tgt);
 		else {
 			// log.trace({function: 'copyDirSync', source: src, target: tgt}, 'Unable to determine type of node for source');
-			err = new Error(`Unable to determine node type for source ${src}`);
+			err = new Error('Unable to determine node type for source ' + src);
 		}
 	}
 
 	if (err) {
-		// log.trace({function: 'copyDirSync', source: dir, target}, 'Failed to completely, recursively copy the source directory');
-		return new Error(`Failed to complete, recursively copy the directory "${dir}" to "${target}"`);
+		// log.trace({function: 'copyDirSync', source: dir, target}, 'Failed to compvarely, recursively copy the source directory');
+		return new Error('Failed to compvare, recursively copy the directory "' + dir + '" to "' + target + '"');
 	}
 }
 defineProperty(fsync, 'copyDir', {value: copyDirSync, enumerable: true});
 
 function copyLinkDirSync (dir, target, clean = false) {
-	let rp = realpathSync(dir);
-	if (!rp) return new Error(`Failed to determine the realpath of "${dir}"`);
+	clean = (clean===undefined) ? false : clean;
+	var rp = realpathSync(dir);
+	if (!rp) return new Error('Failed to determine the realpath of "' + dir + '"');
 	return copyDirSync(rp, target, clean);
 }
 defineProperty(fsync, 'copyLinkDir', {value: copyLinkDirSync, enumerable: true});
@@ -199,25 +203,25 @@ defineProperty(fsync, 'copyLinkDir', {value: copyLinkDirSync, enumerable: true})
 Unlike copyDirSync, this method bails as soon as it encounters an error.
 */
 function removeDirSync (dir) {
-	let err;
+	var err;
 
 	dir = resolve(dir);
 	
-	// this not by any means a sophisticated or complete sanity check but is mostly to keep accidental
+	// this not by any means a sophisticated or compvare sanity check but is mostly to keep accidental
 	// development tests from overwriting important files
 	if (dir == ROOT_DIR || dir.indexOf(ROOT_DIR) > -1) {
 		// log.trace({function: 'removeDirSync', target: dir}, 'Attempt to remove enyo-dev system directory');
-		return new Error(`Cannot remove enyo-dev module source location "${dir}"`);
+		return new Error('Cannot remove enyo-dev module source location "' + dir + '"');
 	}
 
-	let {result: files, error} = readDirSync(dir);
+	var {result: files, error} = readDirSync(dir);
 	if (error) {
 		// log.trace({error, function: 'removeDirSync', target: dir}, 'Failed to read target directory');
-		return new Error(`Failed to read the directory "${dir}" to be removed`);
+		return new Error('Failed to read the directory "' + dir + '" to be removed');
 	}
 
-	for (let i = 0; i < files.length; ++i) {
-		let   src  = join(dir, files[i])
+	for (var i = 0; i < files.length; ++i) {
+		var   src  = join(dir, files[i])
 			, stat = statSync(src);
 		
 		if (stat.isDirectory()) {
@@ -229,14 +233,14 @@ function removeDirSync (dir) {
 		}
 		
 		if (err) {
-			// log.trace({error: err, function: 'removeDirSync', target: dir, source: src}, 'Failed to completely remove directory');
-			return new Error(`Failed to remove directory "${dir}"`);
+			// log.trace({error: err, function: 'removeDirSync', target: dir, source: src}, 'Failed to compvarely remove directory');
+			return new Error('Failed to remove directory "' + dir + '"');
 		}
 	}
 
 	// now remove the actual directory
 	err = _removeDir(dir);
-	if (err) return new Error(`Failed to remove directory "${dir}"`);
+	if (err) return new Error('Failed to remove directory "' + dir + '"');
 }
 defineProperty(fsync, 'removeDir', {value: removeDirSync, enumerable: true});
 
@@ -252,7 +256,7 @@ function _removeDir (dir) {
 Helper function, not exported.
 */
 function copySymbolicLinkSync (source, target) {
-	let real;
+	var real;
 	try {
 		real = fs.realpathSync(source);
 	} catch (e) {
@@ -268,41 +272,41 @@ This is a memory intensive operation because we must read the entire file into m
 writing the file synchronously. Should be used sparingly.
 */
 function copyFileSync (file, target) {
-	let err, stat;
+	var err, stat;
 
 	file   = path.resolve(file);
 	target = path.resolve(target);
 
 	if (!existsSync(file)) {
 		// log.trace({function: 'copyFileSync', source: file, target}, 'Source file does not exist');
-		return new Error(`Source file "${file}" does not exist`);
+		return new Error('Source file "' + file + '" does not exist');
 	}
 	
 	stat = statSync(target);
 	if (stat) {
 		if (stat.isFile()) {
 			// log.trace({function: 'copyFileSync', source: file, target, enc}, 'Target file already exists');
-			return new Error(`Failed to copy "${file}" to "${target}", file already exists`);
+			return new Error('Failed to copy "' + file + '" to "' + target + '", file already exists');
 		} else if (stat.isDirectory()) {
 			// log.trace({function: 'copyFileSync', source: file, target, enc}, 'Target already exists as a directory');
-			return new Error(`Failed to copy "${file}" to "${target}", target already exists as a directory`);
+			return new Error('Failed to copy "' + file + '" to "' + target + '", target already exists as a directory');
 		} else if (stat.isSymbolicLink()) {
 			// log.trace({function: 'copyFileSync', source: file, target, enc}, 'Target already exists as a symbolic link');
-			return new Error(`Failed to copy "${file}" to "${target}", target already exists as a symbolic link`);
+			return new Error('Failed to copy "' + file + '" to "' + target + '", target already exists as a symbolic link');
 		}
 	}
 
 	// reading into agnostic buffer and writing out the same so we don't need to worry about binary and encoding
-	let {result, error} = readFileSync(file);
+	var {result, error} = readFileSync(file);
 	if (error) {
 		// log.trace({error, function: 'copyFileSync', source: file, target}, 'Failed to read the source file');
-		return new Error(`Failed to read source file "${file}"`);
+		return new Error('Failed to read source file "' + file + '"');
 	}
 
 	err = writeFileSync(target, result);
 	if (err) {
 		// log.trace({error: err, function: 'copyFileSync', source: file, target}, 'Failed to write the target file');
-		return new Error(`Failed to write target file "${target}"`);
+		return new Error('Failed to write target file "' + target + '"');
 	}
 }
 defineProperty(fsync, 'copyFile', {value: copyFileSync, enumerable: true});
@@ -319,7 +323,7 @@ defineProperty(fsync, 'realpath', {value: realpathSync, enumerable: true});
 /*
 */
 function readFileSync (file, enc) {
-	let result, error;
+	var result, error;
 	try {
 		result = fs.readFileSync(file, enc);
 	} catch (e) {
@@ -346,7 +350,7 @@ defineProperty(fsync, 'mkdir', {value: makeDirSync, enumerable: true});
 /*
 */
 function existsSync (dir) {
-	let result;
+	var result;
 	try {
 		result = fs.lstatSync(dir);
 	} catch (e) {}
@@ -357,7 +361,7 @@ defineProperty(fsync, 'exists', {value: existsSync, enumerable: true});
 /*
 */
 function statSync (file) {
-	let result;
+	var result;
 	try {
 		result = fs.lstatSync(file);
 	} catch (e) {
@@ -369,7 +373,8 @@ defineProperty(fsync, 'stat', {value: statSync, enumerable: true});
 
 /*
 */
-function writeFileSync (file, data, opts = 'utf8') {
+function writeFileSync (file, data, opts) {
+	opts = (opts===undefined) ? 'utf8' : opts;
 	try {
 		fs.writeFileSync(file, data, opts);
 	} catch (e) {
@@ -382,7 +387,7 @@ defineProperty(fsync, 'writeFile', {value: writeFileSync, enumerable: true});
 /*
 */
 function readDirSync (dir) {
-	let result, error;
+	var result, error;
 	try {
 		result = fs.readdirSync(dir);
 	} catch (e) {
@@ -397,7 +402,7 @@ defineProperty(fsync, 'readdir', {value: readDirSync, enumerable: true});
 /*
 */
 function linkSync (from, to) {
-	let err;
+	var err;
 	try {
 		fs.symlinkSync(path.resolve(from), to, 'junction');
 	} catch (e) {
@@ -411,7 +416,7 @@ defineProperty(fsync, 'link', {value: linkSync, enumerable: true});
 /*
 */
 function unlinkSync (file) {
-	let err;
+	var err;
 	
 	file = resolve(file);
 	
@@ -428,7 +433,7 @@ defineProperty(fsync, 'unlink', {value: unlinkSync, enumerable: true});
 /*
 */
 function removeFileSync (file) {
-	let err;
+	var err;
 	file = resolve(file);
 	try {
 		fs.unlinkSync(file);
@@ -440,14 +445,14 @@ function removeFileSync (file) {
 defineProperty(fsync, 'removeFile', {value: removeFileSync, enumerable: true});
 
 freeze(fsync);
-export {fsync};
+exports.fsync = fsync;
 
 
 
 /*
 */
 function getNormalizedPaths (file) {
-	let   dir = path.normalize(file)
+	var   dir = path.normalize(file)
 		, dirs
 		, drive;
 	if (path.isAbsolute(dir)) {
@@ -475,7 +480,7 @@ Git-uri parsing utilities.
 Simple (very simple) non-exhaustive check to see if a string is most likely a git-uri without
 being too, too slow.
 */
-export function isGitUri (str) {
+exports.isGitUri = function isGitUri (str) {
 	if (str && typeof str == 'string') {
 		if (/^git\@|\.git/.test(str)) return true;
 		// not as particular as it should be...
@@ -484,15 +489,16 @@ export function isGitUri (str) {
 		if (/\.git/.test(str) && existsSync(str)) return true;
 	}
 	return false;
-}
+};
 
 /*
 Attempt to break apart a git-uri. It is assumed to have been tested as a git-uri so we don't
 have to run the test again.
 */
-export function parseGitUri (str, defaultTarget = 'master') {
-	let uri, target, name;
-	let i = str.indexOf('#');
+exports.parseGitUri = function parseGitUri (str, defaultTarget) {
+	var uri, target, name;
+	defaultTarget = (defaultTarget===undefined) ? 'master' : defaultTarget;
+	var i = str.indexOf('#');
 	if (i > -1) {
 		if (i === 0) {
 			target = str.slice(1);
@@ -507,8 +513,8 @@ export function parseGitUri (str, defaultTarget = 'master') {
 	}
 	if (uri.length) name = path.basename(uri);
 	if (name) {
-		let ext = path.extname(name);
+		var ext = path.extname(name);
 		if (ext) name = name.slice(0, -ext.length);
 	}
 	return {uri, target, name};
-}
+};
