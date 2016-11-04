@@ -4,14 +4,26 @@
 
 var   osenv    = require('osenv')
 	, path     = require('path')
-	, fsync    = require('../lib/util-extra').fsync;
+	, fsync;
+
+try {
+	fsync = require('../lib/util-extra').fsync
+} catch(e) {
+	fsync = require('../src/util-extra').fsync
+}
 
 var   home     = osenv.home()
 	, enyo     = path.join(home, '.enyo')
 	, projects = path.join(enyo, 'projects')
 	, defaults = path.join(enyo, 'defaults')
 	, config   = path.join(enyo, 'config')
-	, knowns   = fsync.readJson(path.join(__dirname, '..', 'lib', 'enyo', 'config'));
+	, knowns;
+
+if(fsync.exists(path.join(__dirname, '..', 'lib', 'enyo', 'config.json'))) {
+	knowns = fsync.readJson(path.join(__dirname, '..', 'lib', 'enyo', 'config'));
+} else {
+	knowns = fsync.readJson(path.join(__dirname, '..', 'src', 'enyo', 'config'));
+}
 
 // believe the key changes here are that the projects feature has gone
 // away so we remove it whether it was old-school "file" type or directory

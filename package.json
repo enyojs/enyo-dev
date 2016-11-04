@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"No tests written for this project yet\" && exit 0",
     "postinstall": "node ./bin/upgrade.js",
-    "build": "ncp src lib --filter=\"^(.(?!\\\\.es6$))+$\" --stopOnErr && babel src -d lib -q -x \".es6\"",
+    "build": "ncp src lib --filter=\"^(.(?!\\.es6$))+$\" --stopOnErr && babel src -d lib -q -x \".es6\"",
     "prepublish": "npm run build"
   },
   "author": "Cole Davis <cole.davis@lge.com>",
