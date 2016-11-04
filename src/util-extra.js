@@ -171,7 +171,7 @@ function copyDirSync (dir, target, clean) {
 		return new Error('Failed to ensure target directory from ' + dir +' to ' + target + ': ' + err.message);
 	}
 
-	({result: files} = readDirSync(dir));
+	files = readDirSync(dir).result;
 	// we will var all errors in recursive runs be produced and if there is an error at the end
 	// will return an error about failing the operation even though some of it might have been ok
 	for (var i = 0; i < files.length; ++i) {
@@ -218,7 +218,9 @@ function removeDirSync (dir) {
 		return new Error('Cannot remove enyo-dev module source location "' + dir + '"');
 	}
 
-	var {result: files, error} = readDirSync(dir);
+	var listings = readDirSync(dir);
+	var files = listings.result;
+	var error = listings.error;
 	if (error) {
 		// log.trace({error, function: 'removeDirSync', target: dir}, 'Failed to read target directory');
 		return new Error('Failed to read the directory "' + dir + '" to be removed');
@@ -301,7 +303,9 @@ function copyFileSync (file, target) {
 	}
 
 	// reading into agnostic buffer and writing out the same so we don't need to worry about binary and encoding
-	var {result, error} = readFileSync(file);
+	var data = readFileSync(file);
+	var result = data.result;
+	var error = data.error;
 	if (error) {
 		// log.trace({error, function: 'copyFileSync', source: file, target}, 'Failed to read the source file');
 		return new Error('Failed to read source file "' + file + '"');
