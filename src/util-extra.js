@@ -67,7 +67,9 @@ function writeJsonSync (file, data) {
 	if (data) {
 		if (typeof data == 'string') json = data;
 		else {
-			({result: json, error: err} = stringify(data));
+			var strJSON = stringify(data);
+			json = strJSON.result;
+			err = strJSON.error;
 			if (err) {
 				// log.trace({error: err, json: data, file, function: 'writeJsonSync'}, 'Failed to stringify the payload JSON');
 				json = '';
