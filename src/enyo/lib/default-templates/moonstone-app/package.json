@@ -1,0 +1,15 @@
+{
+  "name": "moonstone-app",
+  "version": "0.0.1",
+  "description": "An Enyo-based template to build web applications using HTML, CSS and JavaScript.",
+  "main": "index.js",
+  "moduleDir": "src",
+  "assets": [
+    "favicon.ico",
+    "assets/**/*.*"
+  ],
+  "styles": [
+    "css/*.less",
+    "css/*.css"
+  ]
+}

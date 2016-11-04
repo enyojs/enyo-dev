@@ -2,11 +2,6 @@
 
 'use strict';
 
-require('babel-register')({
-	extensions: ['.es6'],
-	only: /enyo-dev\/(?!(node_modules))/
-});
-
 var   osenv    = require('osenv')
 	, path     = require('path')
 	, fsync    = require('../lib/util-extra').fsync;

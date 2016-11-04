@@ -1,0 +1,47 @@
+{
+  "title": "",
+  "libDir": "lib",
+  "paths": [],
+  "libraries": [
+    "enyo"
+  ],
+  "sources": {
+    "enyo": "https://github.com/enyojs/enyo.git"
+  },
+  "targets": {
+    "enyo": "master"
+  },
+  "production": false,
+  "devMode": true,
+  "cache": true,
+  "resetCache": false,
+  "trustCache": false,
+  "cacheFile": ".enyocache",
+  "clean": false,
+  "sourceMaps": true,
+  "externals": true,
+  "strict": false,
+  "skip": [],
+  "library": false,
+  "wip": false,
+  "outDir": "dist",
+  "outFile": "index.html",
+  "lessPlugins": [],
+  "assetRoots": [],
+  "lessOnlyLess": false,
+  "minifyCss": false,
+  "inlineCss": true,
+  "outCssFile": "output.css",
+  "outJsFile": "output.js",
+  "inlineJs": true,
+  "templateIndex": "",
+  "watch": false,
+  "watchPaths": [],
+  "polling": false,
+  "pollingInterval": 100,
+  "headScripts": [],
+  "tailScripts": [],
+  "promisePolyfill": false,
+  "styleOnly": false,
+  "lessVars": []
+}

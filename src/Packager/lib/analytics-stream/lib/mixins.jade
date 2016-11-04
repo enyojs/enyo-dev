@@ -1,0 +1,129 @@
+
+
+// - bundle section mixin, outputs detail about a bundle
+mixin bundleSection(bundle)
+	.section.bundle
+		a(name='bundle-#{bundle.name}')
+		h2= bundle.name
+		.table.stats
+			table
+				tr
+					td: a(href='#bundle-#{bundle.name}-modules') modules
+					td= bundle.modules.length
+				tr
+					td size*
+					td 0
+				tr
+					td: a(href='#bundle-#{bundle.name}-dependencies') dependencies
+					td= bundle.dependencies.length
+				tr
+					td: a(href='#bundle-#{bundle.name}-dependents') dependents
+					td= bundle.dependents.length
+				tr
+					td styles
+					td 0
+				tr
+					td assets
+					td 0
+		.modules
+			a(name='bundle-#{bundle.name}-modules')
+			h3 Modules
+			ul.columns
+				for module in bundle.modules
+					li: +moduleLink(module.name)
+		.dependencies
+			a(name='bundle-#{bundle.name}-dependencies')
+			h3 Dependencies
+			if bundle.dependencies.length
+				ul.columns
+					for name in bundle.dependencies
+						li: +bundleLink(name)
+			else
+				p No dependencies
+		.dependents
+			a(name='bundle-#{bundle.name}-dependents')
+			h3 Dependents
+			if bundle.dependents.length
+				ul.columns
+					for name in bundle.dependents
+						li: +bundleLink(name)
+			else
+				p No dependents
+
+// - bundle link for a given name for consistency
+mixin bundleLink(name)
+	a.bundle(href='#bundle-#{name}') #{name}
+
+// - module link for a given name for consistency
+mixin moduleLink(name)
+	a.module(href='#module-#{name}') #{name}
+
+// - module section mixin, outputs detail about a module
+mixin moduleSection(module)
+	.section.module
+		a(name='module-#{module.name}')
+		h2 #{module.name} #[span.meta.package #{module.package ? 'package' : ''}] #[span.meta.entry #{module.entry ? 'entry' : ''}]
+		.table.stats
+			table
+				tr
+					td bundle
+					td: +bundleLink(module.bundle)
+				tr
+					td path
+					td= module.path
+				if module.package
+					tr
+						td package file
+						td= module.packageFile
+					tr
+						td main
+						td= module.main
+					tr
+						td: a(href='#module-#{module.name}-styles') styles
+						td= module.styles.length
+					tr
+						td: a(href='#module-#{module.name}-assets') assets
+						td= module.assets.length
+				tr
+					td: a(href='#module-#{module.name}-dependencies') dependencies
+					td= module.dependencies.length
+				tr
+					td: a(href='#module-#{module.name}-dependents') dependents
+					td= module.dependents.length
+		.dependencies
+			a(name='module-#{module.name}-dependencies')
+			h3 Dependencies
+			if module.dependencies.length
+				ul.columns
+					for name in module.dependencies
+						li: +moduleLink(name)
+			else
+				p No dependencies
+		.dependents
+			a(name='module-#{module.name}-dependents')
+			h3 Dependents
+			if module.dependents.length
+				ul.columns
+					for name in module.dependents
+						li: +moduleLink(name)
+			else
+				p No dependents
+		if module.package
+			.styles
+				a(name='module-#{module.name}-styles')
+				h3 Styles
+				if module.styles.length
+					ul.columns
+						for file in module.styles
+							li= file
+				else
+					p No styles
+			.assets
+				a(name='module-#{module.name}-assets')
+				h3 Assets
+				if module.assets.length
+					ul.columns
+						for file in module.assets
+							li= file
+				else
+					p No Assets

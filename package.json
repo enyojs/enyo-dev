@@ -1,6 +1,6 @@
 {
   "name": "enyo-dev",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Packaging and developer management tools for Enyo 2.x",
   "main": "index.js",
   "repository": "https://github.com/enyojs/enyo-dev",
@@ -9,7 +9,9 @@
   },
   "scripts": {
     "test": "echo \"No tests written for this project yet\" && exit 0",
-    "postinstall": "node ./bin/upgrade.js"
+    "postinstall": "node ./bin/upgrade.js",
+    "build": "ncp src lib --filter=\"^(.(?!\\\\.es6$))+$\" --stopOnErr && babel src -d lib -q -x \".es6\"",
+    "prepublish": "npm run build"
   },
   "author": "Cole Davis <cole.davis@lge.com>",
   "maintainers": [
@@ -25,9 +27,6 @@
   "dependencies": {
     "archy": "~1.0.0",
     "array-uniq": "~1.0.2",
-    "babel-core": "~6.3.13",
-    "babel-preset-es2015": "~6.3.13",
-    "babel-register": "~6.3.13",
     "bluebird": "~3.0.6",
     "bunyan": "~1.3.5",
     "bunyan-format": "~0.2.1",
@@ -63,5 +62,10 @@
     "through2": "~2.0.0",
     "uglify-js": "~2.4.17",
     "winston": "~2.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "~6.18.0",
+    "babel-preset-es2015": "~6.3.13",
+    "ncp": "~2.0.0"
   }
 }

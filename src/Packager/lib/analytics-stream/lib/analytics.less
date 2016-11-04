@@ -1,0 +1,163 @@
+// analytics runtime style
+@base:    #F7B67C;
+@accent1: #F7D46E;
+@accent2: #E0B265;
+@accent3: #E08A65;
+@accent4: #F78070;
+
+.box() {
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+body {
+	font-family: 'Helvetica Neue';
+	font-weight: 300;
+	position: relative;
+	width: 100%;
+	min-width: 800px;
+	margin: 0;
+}
+
+h1, h2, h3, ul {
+	-webkit-margin-before: 0;
+	-webkit-margin-after: 0;
+	-webkit-margin-start: 0;
+	-webkit-margin-end: 0;
+	-webkit-padding-start: 0;
+}
+
+a {
+	font-size: .9em;
+}
+a, a:visited {
+	text-decoration: none;
+	color: @base;
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+ul {
+	margin: 0;
+	list-style: none;
+	li {
+		margin: 0;
+	}
+}
+
+ul.columns {
+	columns: 2;
+	-webkit-columns: 2;
+	-moz-columns: 2;
+}
+
+ul.menu {
+	li {
+		display: inline-block;
+		padding-right: 20px;
+	}
+}
+
+span.meta {
+	color: @accent1;
+	font-size: .8em;
+	font-weight: 100;
+}
+
+h1, h2, h3 {
+	font-weight: 300;
+	color: @accent2;
+}
+
+table {
+	thead {
+		font-weight: bold;
+	}
+	tr, td {
+		padding: 10px 0;
+	}
+	td {
+		min-width: 100px;
+		.box();
+		padding: 5px;
+	}
+	tr:nth-child(even) {
+		background-color: @accent1;
+	}
+}
+
+#header {
+	.box();
+	padding: 20px;
+	order: 2;
+	display: flex;
+}
+
+#header {
+	.search {
+		.box();
+		width: 250px;
+		padding: 10px;
+	}
+	div.menu {
+		.box();
+		margin: auto 0;
+		display: flex;
+		flex-direction: column;
+		flex: 1 0 auto;
+		padding: 10px;
+	}
+}
+
+#search {
+	.box();
+	font-size: 1.2em;
+	line-height: 1.2em;
+	padding: 5px;
+	width: 230px;
+}
+
+#main {
+	.box();
+	position: relative;
+	padding: 0 20px 20px 20px;
+}
+
+.section {
+	padding: 20px 0;
+}
+
+
+
+// path.arc {
+// 	fill: #fff;
+// }
+//
+// .link {
+// 	fill: none;
+// 	stroke: #1f77b4;
+// 	stroke-opacity: .4;
+// 	pointer-events: none;
+// 	&.source, &.target {
+// 		stroke-opacity: 1;
+// 		stroke-width: 2px;
+// 	}
+// 	&.source {
+// 		stroke: #d62728;
+// 	}
+// 	&.target {
+// 		stroke: #2ca02c;
+// 	}
+// }
+//
+// .node {
+// 	font-size: 10px;
+// 	&.target {
+// 		fill: #d62728;
+// 	}
+// 	&.source {
+// 		fill: #2ca02c;
+// 	}
+// }

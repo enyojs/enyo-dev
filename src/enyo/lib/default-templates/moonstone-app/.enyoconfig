@@ -1,0 +1,69 @@
+{
+  "title": "",
+  "libDir": "lib",
+  "paths": [],
+  "libraries": [
+    "enyo",
+    "moonstone",
+    "spotlight",
+    "layout",
+    "svg",
+    "enyo-ilib"
+  ],
+  "sources": {
+    "enyo": "https://github.com/enyojs/enyo.git",
+    "moonstone": "https://github.com/enyojs/moonstone.git",
+    "spotlight": "https://github.com/enyojs/spotlight.git",
+    "layout": "https://github.com/enyojs/layout.git",
+    "svg": "https://github.com/enyojs/svg.git",
+    "enyo-ilib": "https://github.com/enyojs/enyo-ilib.git"
+  },
+  "targets": {
+    "enyo": "master",
+    "moonstone": "master",
+    "spotlight": "master",
+    "layout": "master",
+    "svg": "master",
+    "enyo-ilib": "master"
+  },
+  "production": false,
+  "devMode": true,
+  "cache": true,
+  "resetCache": false,
+  "trustCache": false,
+  "cacheFile": ".enyocache",
+  "clean": false,
+  "sourceMaps": true,
+  "externals": true,
+  "strict": false,
+  "skip": [],
+  "library": false,
+  "wip": false,
+  "outDir": "dist",
+  "outFile": "index.html",
+  "lessPlugins": [
+    {
+      "name": "resolution-independence",
+      "options": {
+        "baseSize": 24
+      }
+    }
+  ],
+  "assetRoots": [],
+  "lessOnlyLess": false,
+  "minifyCss": false,
+  "inlineCss": true,
+  "outCssFile": "output.css",
+  "outJsFile": "output.js",
+  "inlineJs": true,
+  "templateIndex": "",
+  "watch": false,
+  "watchPaths": [],
+  "polling": false,
+  "pollingInterval": 100,
+  "headScripts": [],
+  "tailScripts": [],
+  "promisePolyfill": false,
+  "styleOnly": false,
+  "lessVars": []
+}
