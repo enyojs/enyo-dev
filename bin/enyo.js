@@ -2,11 +2,6 @@
 
 'use strict';
 
-require('babel-register')({
-	extensions: ['.es6'],
-	only: /enyo-dev\/(?!(node_modules))/
-});
-
 var   nom     = require('nomnom')
 	, options = require('../lib/enyo/options').default
 	, comms   = require('../lib/enyo/commands').default
