@@ -423,7 +423,7 @@ enyo unlink -g --unlink-all
 enyo unlink -g -U
 ```
 
-###<a name="commands-templates"></a>templates `enyo templates`
+#### <a name="commands-templates"></a>templates `enyo templates`
 
 ```bash
 Usage: enyo templates [action] [target] [options]
@@ -465,7 +465,7 @@ enyo templates add path/to/template
 enyo templates install https://github.com/enyojs/moonstone-template.git
 ```
 
-### <a name="commands-pack"></a> pack `enyo pack`
+#### <a name="commands-pack"></a> pack `enyo pack`
 
 ```bash
 Usage: enyo pack [package] [options]
