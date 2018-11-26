@@ -89,6 +89,7 @@ function initTemplate ({project, template, opts, env, log}) {
 
 	let   templates = getTemplates(env)
 		, data      = templates[template]
+		, isTemplate = true
 		, name      = opts.name || path.basename(project)
 		, stat
 		, err;
@@ -107,7 +108,7 @@ function initTemplate ({project, template, opts, env, log}) {
 		return false;
 	}
 	
-	if      (stat.isDirectory())    err = fsync.copyDir(data.path, project);
+	if      (stat.isDirectory())    err = fsync.copyDir(data.path, project, false, isTemplate);
 	else if (stat.isSymbolicLink()) err = fsync.copyLinkDir(data.path, project);
 
 	if (err) {
