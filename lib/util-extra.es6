@@ -172,7 +172,7 @@ function copyDirSync (dir, target, clean = false, isTemplate) {
 			, tgt  = join(target, files[i])
 			, stat = statSync(src);
 		// for templates allow copying of .gitignore file, but not .git directory
-		if      (isTemplate && src.indexOf('.gitignore') <= 0 && src.indexOf('.git') > 0) continue;
+		if      (isTemplate && files[i].indexOf('.gitignore') < 0 && src.indexOf('.git') > 0) continue;
 		else if (stat.isDirectory())    err = copyDirSync(src, tgt);
 		else if (stat.isFile())         err = copyFileSync(src, tgt);
 		else if (stat.isSymbolicLink()) err = copySymbolicLinkSync(src, tgt);
