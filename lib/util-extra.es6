@@ -137,7 +137,7 @@ defineProperty(fsync, 'ensureDir', {value: ensureDirSync, enumerable: true});
 /*
 This operation should be used sparingly because of its slowness and memory consumption.
 */
-function copyDirSync (dir, target, clean = false) {
+function copyDirSync (dir, target, clean = false, isTemplate) {
 	let err, files;
 
 	dir    = resolve(dir);
@@ -171,7 +171,9 @@ function copyDirSync (dir, target, clean = false) {
 		let   src  = join(dir, files[i])
 			, tgt  = join(target, files[i])
 			, stat = statSync(src);
-		if      (stat.isDirectory())    err = copyDirSync(src, tgt);
+		// for templates allow copying of .gitignore file, but not .git directory
+		if      (isTemplate && files[i].indexOf('.gitignore') < 0 && src.indexOf('.git') > 0) continue;
+		else if (stat.isDirectory())    err = copyDirSync(src, tgt);
 		else if (stat.isFile())         err = copyFileSync(src, tgt);
 		else if (stat.isSymbolicLink()) err = copySymbolicLinkSync(src, tgt);
 		else {
